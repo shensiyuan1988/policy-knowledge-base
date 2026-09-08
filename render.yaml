@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: policy-knowledge-base
+    env: node
+    region: singapore
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: VITE_SUPABASE_URL
+        value: https://br-calm-teal-159ed88c.supabase2.aidap-global.cn-beijing.volces.com
+      - key: VITE_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjMzNjkzMDc3MTMsInJvbGUiOiJhbm9uIn0.1Y0-cy541uhsosFn_816YufsxLdpvCUu9YnXUunhovY
