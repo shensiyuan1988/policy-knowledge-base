@@ -1,13 +1,2194 @@
-<!doctype html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="残联政务政策知识库管理系统" />
-    <title>政策知识库管理系统</title>
+<!DOCTYPE html>
+<!-- saved from url=(0269)https://static.coze.site/7625854171643855145-data_volume/files/%E6%89%80%E6%9C%89%E5%AF%B9%E8%AF%9D/%E4%B8%BB%E5%AF%B9%E8%AF%9D/%E4%B8%89%E6%96%B9%E6%96%87%E4%BB%B6/index.html?sign=1795246298-7d9d2126be-0-6a6d351114036804067312ae7a9516c59ec8915a42015c9f05022f924d304161 -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>事项数据管理系统</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pri:#1677FF;--pri-l:#E8F3FF;--pri-d:#0E5FD8;
+  --accent:#FF7D00;--accent-l:#FFF7E8;
+  --bg:#F5F7FA;--card:#fff;--border:#E5E6EB;
+  --t1:#1D2129;--t2:#4E5969;--t3:#86909C;
+  --ok:#00B42A;--warn:#FF7D00;--err:#F53F3F;
+  --r:10px;--r-sm:8px;--r-lg:16px;
+  --shadow:0 2px 12px rgba(0,0,0,.06);
+  --shadow-h:0 4px 16px rgba(22,119,255,.14);
+  --sidebar-w:320px;
+}
+html{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--t1);height:100%;display:flex;flex-direction:column;overflow:hidden;line-height:1.5}
+a{color:var(--pri);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* === Header === */
+.app-header{background:linear-gradient(135deg,#1677FF 0%,#0E5FD8 100%);color:#fff;padding:0 24px;height:58px;display:flex;align-items:center;gap:12px;flex-shrink:0;box-shadow:0 2px 10px rgba(22,119,255,.22);position:relative;z-index:20}
+.app-header h1{font-size:17px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:10px;letter-spacing:.2px}
+.app-header h1 .logo{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:9px;background:rgba(255,255,255,.2);font-size:15px;line-height:1;flex-shrink:0}
+.app-header .stats{font-size:12px;opacity:.95;margin-left:auto;white-space:nowrap;background:rgba(255,255,255,.15);padding:5px 12px;border-radius:14px}
+
+/* === Layout === */
+.app-body{display:flex;flex:1;overflow:hidden}
+
+/* === 一级页：事项列表 === */
+.page-list{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);min-width:0}
+.app-body[data-view="list"] .content{display:none}
+.app-body[data-view="detail"] .page-list{display:none}
+.list-toolbar{padding:16px 24px 14px;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.list-search{position:relative;margin-bottom:12px}
+.list-search::before{content:'';position:absolute;left:17px;top:50%;width:13px;height:13px;margin-top:-9px;border:2px solid #B8BFC9;border-radius:50%;pointer-events:none;transition:border-color .2s}
+.list-search::after{content:'';position:absolute;left:28px;top:50%;width:7px;height:2px;margin-top:2px;background:#B8BFC9;border-radius:1px;transform:rotate(45deg);transform-origin:left center;pointer-events:none;transition:background .2s}
+.list-search:focus-within::before{border-color:var(--pri)}
+.list-search:focus-within::after{background:var(--pri)}
+.list-search input{width:100%;height:44px;padding:0 16px 0 44px;border:1px solid var(--border);border-radius:12px;font-size:14px;outline:none;background:var(--bg);color:var(--t1);transition:border-color .2s,box-shadow .2s,background .2s}
+.list-search input::placeholder{color:var(--t3)}
+.list-search input:focus{border-color:var(--pri);background:#fff;box-shadow:0 0 0 3px rgba(22,119,255,.1)}
+.list-filters{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap}
+.fbtn{padding:5px 14px;border:1px solid var(--border);border-radius:16px;font-size:12px;font-weight:500;background:#fff;cursor:pointer;color:var(--t2);transition:all .15s;white-space:nowrap}
+.fbtn:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-l)}
+.fbtn.on{background:var(--pri);color:#fff;border-color:var(--pri);box-shadow:0 2px 8px rgba(22,119,255,.28)}
+.list-filters select{height:32px;padding:0 8px 0 12px;border:1px solid var(--border);border-radius:8px;font-size:12px;background:#fff;color:var(--t2);outline:none;cursor:pointer;max-width:220px;transition:all .15s}
+.list-filters select:hover{border-color:var(--pri);color:var(--pri)}
+.list-filters select:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(22,119,255,.1)}
+.list-count{margin-left:auto;font-size:12px;color:var(--t2);white-space:nowrap}
+.list-count b{color:var(--pri);font-size:16px;font-weight:600;margin:0 3px}
+.list-head{display:flex;align-items:center;gap:12px;padding:9px 32px;background:var(--bg);border-bottom:1px solid var(--border);font-size:11px;color:var(--t3);font-weight:600;letter-spacing:.4px;flex-shrink:0}
+.list-head .lh-name{flex:1;min-width:0}
+.list-head .lh-cnt{width:190px;flex-shrink:0}
+.list-head .lh-time{width:150px;flex-shrink:0;text-align:right}
+.item-list{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 16px}
+.lrow{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:border-color .16s,box-shadow .16s,transform .16s,background .16s;box-shadow:0 1px 2px rgba(29,33,41,.03)}
+.lrow:hover{border-color:#BFDBFF;box-shadow:var(--shadow-h);transform:translateY(-1px)}
+.lrow.sel{border-color:var(--pri);background:var(--pri-l);box-shadow:0 3px 12px rgba(22,119,255,.16)}
+.lrow-main{flex:1;min-width:0}
+.lrow-name{font-size:14px;font-weight:600;line-height:1.5;color:var(--t1);word-break:break-word}
+.lrow-sub{font-size:12px;color:var(--t3);margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.lrow-cnt{width:190px;flex-shrink:0;display:flex;gap:10px;font-size:11px;color:var(--t3);align-items:center}
+.lrow-cnt .has{color:var(--ok);font-weight:500}
+.lrow-time{width:150px;flex-shrink:0;text-align:right;font-size:12px;color:var(--t3);white-space:nowrap}
+.lrow-time .edited{color:var(--ok);font-weight:600}
+.ltype{display:inline-block;font-size:11px;padding:2px 8px;border-radius:6px;margin-right:7px;white-space:nowrap;font-weight:500}
+.pag{padding:12px 16px;background:var(--card);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;flex-shrink:0}
+.pag button{min-width:30px;height:30px;padding:0 8px;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:12px;color:var(--t2);transition:all .15s}
+.pag button:hover:not(:disabled){border-color:var(--pri);color:var(--pri);background:var(--pri-l)}
+.pag button.cur{background:var(--pri);color:#fff;border-color:var(--pri);font-weight:600;box-shadow:0 2px 8px rgba(22,119,255,.28)}
+.pag button:disabled{opacity:.35;cursor:default}
+
+/* === Content === */
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;background:var(--card)}
+.cnt-header{padding:16px 24px 0;background:var(--card);border-bottom:1px solid var(--border);flex-shrink:0}
+.cnt-back{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--pri);cursor:pointer;margin-bottom:10px;user-select:none;padding:4px 12px;border-radius:14px;background:var(--pri-l);transition:all .15s}
+.cnt-back:hover{background:#D6E9FF}
+.cnt-title{font-size:17px;font-weight:600;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cnt-sub{font-size:12px;color:var(--t2);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tabs{display:flex;gap:2px;margin-top:12px}
+.tab{padding:8px 16px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:var(--t2);transition:all .15s;white-space:nowrap;display:flex;align-items:center;gap:5px}
+.tab:hover{color:var(--pri)}
+.tab.on{color:var(--pri);border-bottom-color:var(--pri);font-weight:600}
+.tab .bdg{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;font-size:10px;font-weight:600;padding:0 5px}
+.bdg-y{background:var(--pri-l);color:var(--pri)}
+.bdg-n{background:#F2F3F5;color:var(--t3)}
+.tab-body{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--card);padding:18px 24px}
+
+/* === Action Bar === */
+.act-bar{padding:12px 24px;background:var(--card);border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;flex-shrink:0}
+.btn{padding:8px 16px;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--t1);transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-l)}
+.btn-p{background:var(--pri);color:#fff;border-color:var(--pri);box-shadow:0 2px 8px rgba(22,119,255,.26)}
+.btn-p:hover{background:var(--pri-d);color:#fff;border-color:var(--pri-d);box-shadow:0 4px 12px rgba(22,119,255,.34)}
+.btn:disabled{opacity:.5;cursor:default}
+
+/* === Empty === */
+.empty{text-align:center;padding:64px 20px;color:var(--t3)}
+.empty .ei{font-size:44px;margin-bottom:14px;opacity:.45}
+.empty .et{font-size:13px}
+
+/* === 受理条件 === */
+.cond-orig{margin-bottom:14px;padding:10px 14px;background:#f0f4f8;border-radius:var(--r);border-left:3px solid var(--pri)}
+.cond-orig-label{font-size:11px;color:var(--t3);margin-bottom:2px}
+.cond-orig-text{font-size:13px;line-height:1.6}
+.cond-meta{margin-bottom:10px;padding:8px 12px;background:#f8fafc;border-radius:var(--r);display:flex;gap:8px;align-items:baseline;font-size:12px}
+.cm-label{color:var(--t3);font-weight:500;white-space:nowrap}
+.cm-val{color:var(--t1);line-height:1.5}
+.sc-stats{padding:8px 12px;background:#fafbfc;border-bottom:1px solid #f0f0f0;display:flex;gap:12px;flex-wrap:wrap;font-size:11px}
+.sc-stat{color:var(--t2);display:flex;align-items:center;gap:3px}
+.sc-stat b{color:var(--t1);font-weight:600}
+.sc-stat.dr b{color:#0d7a3e}
+.sc-stat.mj b{color:#b35c00}
+.sc-stat.rel{margin-left:auto;color:var(--t3)}
+.sc-stat.rel b{color:var(--pri);font-size:12px}
+.sc-logic{padding:8px 12px;margin:0;background:#f5f8fb;border-top:1px solid #f0f0f0;font-size:12px;display:flex;gap:8px;align-items:baseline}
+.sl-label{color:var(--t3);font-weight:500;white-space:nowrap}
+.sl-val{font-family:'Menlo','Consolas',monospace;font-size:12px;color:var(--pri);font-weight:500}
+.sc-action{padding:8px 12px;background:#e8f5e9;border-top:1px solid #c8e6c9;font-size:12px;display:flex;gap:8px;align-items:baseline}
+.sa-label{color:#2e7d32;font-weight:500;white-space:nowrap}
+.sa-val{color:#1b5e20;font-weight:600}
+.sc-card{border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.sc-hd{padding:10px 14px;background:#f5f8fb;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sc-name{font-size:13px;font-weight:500}
+.sc-tog{font-size:11px;color:var(--t3);cursor:pointer;user-select:none}
+.sc-tog:hover{color:var(--pri)}
+.cd-row{padding:8px 14px;display:flex;align-items:flex-start;gap:10px;border-bottom:1px solid #f5f5f5}
+.cd-row:last-child{border-bottom:none}
+.cd-idx{width:22px;height:22px;border-radius:50%;background:var(--pri-l);color:var(--pri);font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.cd-body{flex:1;min-width:0}
+.cd-desc{font-size:13px;line-height:1.5}
+.cd-tags{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.cd-tag{font-size:11px;padding:1px 7px;border-radius:10px;white-space:nowrap}
+.cd-tag.dr{background:#e6f4ea;color:#137333}
+.cd-tag.nd{background:#fce8e6;color:#c5221f}
+.cd-tag.info{background:#f0f0f0;color:var(--t2)}
+.cd-tag.note{background:#fff3e0;color:#e65100}
+.cd-notes-display{margin-top:6px;padding:6px 10px;background:#fff8e1;border-left:3px solid #ffb300;border-radius:4px;font-size:12px;color:#5d4037;line-height:1.6;white-space:pre-wrap;word-break:break-word}
+.cnt-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cnt-tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;background:var(--pri-l);color:var(--pri);font-weight:500}
+.mat-tbl,.res-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.mat-tbl th,.mat-tbl td,.res-tbl th,.res-tbl td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.mat-tbl th,.res-tbl th{background:#f8f9fa;font-weight:600;color:var(--t2);font-size:11px;white-space:nowrap;position:sticky;top:0}
+.mat-tbl tr:hover,.res-tbl tr:hover{background:#f8f9fa}
+.mat-type{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500}
+.mat-type-necessary{background:#fce4ec;color:#c62828}
+.mat-type-optional{background:#e8f5e9;color:#2e7d32}
+.mat-summary{display:flex;gap:12px;flex-wrap:wrap;padding:10px 12px;background:#f8f9fa;border-radius:8px;margin-bottom:8px}
+.mat-stat{font-size:12px;color:var(--t2)}.mat-stat strong{color:var(--t1);font-weight:600}
+.mat-stat-green{color:#2e7d32}.mat-stat-green strong{color:#1b5e20}
+.mat-stat-blue{color:#1565c0}.mat-stat-blue strong{color:#0d47a1}
+.mat-note{font-size:11px;color:var(--t3);margin-top:3px;line-height:1.4}
+.row-exempt{background:#f1f8e9}
+.cert-badge{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500}
+.cert-linked{background:#e3f2fd;color:#1565c0}
+.cert-unlinked{background:#fafafa;color:#999}
+.res-type{display:inline-block;padding:2px 8px;border-radius:8px;font-size:11px;background:#e3f2fd;color:#1565c0}
+.info-card{background:#f8f9fa;border-radius:var(--r);padding:12px 16px;margin-bottom:16px;border:1px solid var(--border)}
+.info-card-row{display:flex;gap:12px;margin-bottom:6px;font-size:12px;line-height:1.5}
+.info-card-row:last-child{margin-bottom:0}
+.info-card-label{color:var(--t2);min-width:80px;flex-shrink:0}
+.info-card-value{color:var(--t1);word-break:break-word}
+.cd-row.cd-edit{border:1px solid #e8e8e8;border-radius:8px;padding:12px 14px;margin-bottom:8px;background:#fafbfc}
+.cd-edit-row{margin-bottom:6px}
+.cd-edit-row label{display:block;font-size:11px;color:var(--t3);margin-bottom:3px;font-weight:500}
+.cd-edit-row textarea{width:100%;border:1px solid #d9d9d9;border-radius:6px;padding:6px 8px;font-size:13px;line-height:1.5;resize:vertical;font-family:inherit;box-sizing:border-box}
+.cd-edit-row textarea:focus,.cd-edit-row input:focus{outline:none;border-color:var(--pri)}
+.cd-edit-row input[type="text"]{width:100%;border:1px solid #d9d9d9;border-radius:6px;padding:5px 8px;font-size:12px;box-sizing:border-box}
+.cd-edit-inline{display:flex;gap:12px;align-items:center}
+.cd-edit-inline label{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t2);margin-bottom:0}
+.cd-edit-inline input[type=checkbox]{accent-color:var(--pri)}
+.cd-edit-inline input[type=text]{flex:1}
+.btn-del{background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;font-size:11px;padding:2px 10px;border-radius:6px;cursor:pointer}
+.btn-del:hover{background:#cf1322;color:#fff}
+
+/* === 政策依据 === */
+.reg-intro{font-size:12px;color:var(--t2);margin-bottom:10px}
+.reg-card{border:1px solid var(--border);border-radius:var(--r);margin-bottom:12px;overflow:hidden}
+.reg-hd{padding:10px 14px;background:#fff;border-bottom:1px solid #f0f0f0;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .12s;flex-wrap:wrap}
+.reg-hd:hover{background:#fafbfc}
+.reg-hd .rn{font-size:13px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.reg-hd .rd{font-size:11px;color:var(--t3);flex-shrink:0}
+.reg-hd .ra{font-size:12px;color:var(--t3);transition:transform .2s;flex-shrink:0}
+.reg-hd .ra.open{transform:rotate(90deg)}
+.reg-status{display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500}
+.reg-status.valid{background:#e6f4ea;color:#137333}
+.reg-status.other{background:#f0f0f0;color:var(--t2)}
+.reg-bd{display:none;padding:0;border-top:1px solid #f0f0f0;background:#fafbfc}
+.reg-bd.open{display:block}
+.reg-meta-bar{padding:10px 14px;display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid #eee;background:#f8fafc}
+.reg-meta-item{font-size:11px;color:var(--t2);display:flex;align-items:center;gap:3px}
+.reg-meta-item strong{color:var(--t1);font-weight:500}
+.reg-section{padding:10px 14px}
+.reg-section-title{font-size:12px;font-weight:600;color:var(--pri);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.reg-section-title::before{content:'';display:inline-block;width:3px;height:12px;background:var(--pri);border-radius:2px}
+.ref-clause{padding:8px 10px;background:#fff;border-radius:6px;margin-bottom:6px;border-left:3px solid var(--pri)}
+.ref-clause-num{font-size:11px;font-weight:600;color:var(--pri);margin-bottom:2px}
+.ref-clause-content{font-size:13px;line-height:1.6;color:var(--t1)}
+.ref-clause-edit{padding:10px 12px;background:#f8f9ff;border:1px solid #e0e4f0;border-radius:8px;margin-bottom:8px}
+.ref-clause-edit-row{display:grid;grid-template-columns:60px 1fr 70px 1fr;gap:6px;align-items:center}
+.ref-clause-edit-row label{font-size:11px;color:var(--t3);font-weight:500}
+.reg-inp-cn,.reg-inp-cc{border:1px solid #d9d9d9;border-radius:5px;padding:4px 8px;font-size:12px;width:100%;box-sizing:border-box}
+.reg-inp-cn:focus,.reg-inp-cc:focus{outline:none;border-color:var(--pri)}
+.reg-article{padding:8px 10px;border-bottom:1px solid #f0f0f0}
+.reg-article:last-child{border-bottom:none}
+.reg-article.highlight{background:#fffbe6;border-left:3px solid var(--warn)}
+.reg-json-block{margin:0 14px 14px;padding:12px;background:#1e1e2e;color:#cdd6f4;border-radius:8px;font-family:'Menlo','Consolas','Courier New',monospace;font-size:11px;line-height:1.5;overflow-x:auto;white-space:pre-wrap;word-break:break-all;max-height:500px;overflow-y:auto}
+.reg-json-block .json-key{color:#89b4fa}
+.reg-json-block .json-str{color:#a6e3a1}
+.reg-json-block .json-num{color:#fab387}
+.reg-json-block .json-bool{color:#cba6f7}
+.reg-json-block .json-null{color:#6c7086}
+.reg-json-block .json-highlight{background:rgba(250,204,21,0.15);display:inline}
+.reg-article-title{font-size:12px;color:var(--t1);margin-bottom:2px}
+.reg-article-content{font-size:12px;line-height:1.5;color:var(--t2)}
+.reg-article-type{display:inline-block;padding:0 5px;border-radius:6px;font-size:10px;background:#f0f0f0;color:var(--t2);margin-left:6px}
+.reg-article-note{margin-top:4px;padding:6px 8px;background:#f5f5f5;border-radius:4px;font-size:11px;color:var(--t2);line-height:1.5}
+.reg-toggle-articles{padding:8px 14px;text-align:center;cursor:pointer;font-size:12px;color:var(--pri);border-top:1px solid #f0f0f0}
+.reg-toggle-articles:hover{background:var(--pri-l)}
+.reg-source-link{font-size:11px;color:var(--pri)}
+
+/* === 申请表 === */
+.fm-info{display:flex;gap:14px;margin-bottom:14px;flex-wrap:wrap}
+.fm-info span{font-size:12px;color:var(--t2)}
+.fm-info strong{color:var(--t1);font-weight:500}
+.fm-note{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;background:#fff8e1;border:1px solid #ffe082;border-radius:8px;margin-bottom:14px;font-size:13px;color:#5d4037;line-height:1.5}
+.fm-note.empty{background:#f5f5f5;border-color:#e0e0e0;color:var(--t3)}
+.fm-note-icon{font-size:16px;flex-shrink:0;line-height:1.3}
+.fm-note-text{flex:1;white-space:pre-wrap;word-break:break-word}
+.fm-note-edit{flex-shrink:0;padding:2px 10px;font-size:11px;background:#fff;border:1px solid #ffe082;border-radius:4px;color:#f57c00;cursor:pointer;transition:all .15s}
+.fm-note-edit:hover{background:#fff3e0;border-color:#ffb74d}
+.qa-ref{padding:6px 16px 8px;font-size:11px;border-top:1px dashed #e5e7eb}
+.qa-ref a{color:var(--pri);text-decoration:none}
+.qa-ref a:hover{text-decoration:underline}
+.qa-actions{display:flex;gap:6px;padding:8px 16px;border-top:1px solid #e5e7eb;background:#fafafa}
+.btn-sm{padding:4px 10px;font-size:11px;border:1px solid #d1d5db;border-radius:5px;cursor:pointer;background:#fff;color:var(--t2);transition:all .12s}
+.btn-sm:hover{background:#f3f4f6;border-color:#9ca3af}
+.btn-sm.btn-danger{color:#ef4444;border-color:#fecaca}
+.btn-sm.btn-danger:hover{background:#fef2f2}
+.field-filter-bar{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:12px;padding:8px 12px;background:#f8f9fa;border-radius:8px;border:1px solid #e9ecef}
+.field-filter-group{display:flex;align-items:center;gap:4px}
+.field-filter-group label{font-size:11px;color:var(--t2);white-space:nowrap;font-weight:500}
+.field-filter-group select{border:1px solid #d0d5dd;border-radius:5px;padding:3px 6px;font-size:11px;background:#fff;color:var(--t1);max-width:140px;cursor:pointer}
+.field-filter-group select:focus{outline:none;border-color:var(--pri)}
+.field-filter-reset{font-size:11px;padding:3px 10px;border:1px solid #d0d5dd;border-radius:5px;background:#fff;color:var(--t2);cursor:pointer}
+.field-filter-reset:hover{background:#f0f0f0}
+.ftbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.ftbl{width:100%;border-collapse:collapse;font-size:12px;min-width:700px}
+.ftbl th{background:#f0f4f8;padding:7px 10px;text-align:left;font-weight:500;color:var(--t2);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:1;white-space:nowrap}
+.ftbl td{padding:7px 10px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+.ftbl tr:hover td{background:#fafbfc}
+.ftbl .fn{font-weight:500}
+.ttag{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:500;white-space:nowrap}
+.ttag.text{background:#E8F3FF;color:#1677FF}
+.ttag.number{background:#e6f4ea;color:#137333}
+.ttag.date{background:#fef7e0;color:#b06000}
+.ttag.select{background:#f3e8fd;color:#7627bb}
+.ttag.textarea{background:#E8F3FF;color:#1677FF}
+.ttag.attachment{background:#fce8e6;color:#c5221f}
+.ttag.signature{background:#fff3e0;color:#e65100}
+.ttag.image{background:#e0f7fa;color:#00838f}
+.req-y{color:var(--err);font-weight:500}
+.req-n{color:var(--t3)}
+
+/* === Dimension Tags === */
+.dtag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap;margin:2px 1px;line-height:1.4;cursor:default;border:1px solid transparent}
+.dtag.主体{background:#E8F3FF;color:#1677FF;border-color:#1677FF30}
+.dtag.客体{background:#e6f4ea;color:#0d7a3e;border-color:#0d7a3e30}
+.dtag.空间{background:#e0f7fa;color:#00708a;border-color:#00708a30}
+.dtag.凭证{background:#fff3e0;color:#b35c00;border-color:#b35c0030}
+.dtag.载体{background:#f3e8fd;color:#7b1fa2;border-color:#7b1fa230}
+.dtag .di{font-size:11px;line-height:1}
+#dim-tip{position:fixed;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#fff;padding:10px 16px;border-radius:10px;font-size:12px;font-weight:400;pointer-events:none;opacity:0;transition:opacity .15s;z-index:99999;max-width:300px;line-height:1.7;box-shadow:0 8px 24px rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.08)}
+#dim-tip .dt-title{font-weight:600;font-size:13px;margin-bottom:2px}
+#dim-tip .dt-desc{opacity:.85;font-size:11px}
+#dim-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#16213e}
+.dim-cell{display:flex;flex-wrap:wrap;align-items:center;gap:2px;min-width:90px}
+.dim-edit-group{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0}
+.dim-edit-cb{display:inline-flex;align-items:center;gap:4px;cursor:pointer;padding:3px 6px;border-radius:8px;transition:background .15s}
+.dim-edit-cb:hover{background:var(--bg2)}
+.dim-edit-cb input[type=checkbox]{width:14px;height:14px;cursor:pointer;accent-color:var(--pri)}
+.dim-edit-desc{font-size:10px;color:var(--t3)}
+
+/* === Modal === */
+.modal-bg{position:fixed;inset:0;background:rgba(29,33,41,.45);z-index:100;display:none;align-items:center;justify-content:center}
+.modal-bg.show{display:flex}
+.modal{background:#fff;border-radius:16px;width:520px;max-width:92vw;max-height:82vh;display:flex;flex-direction:column;box-shadow:0 16px 48px rgba(0,0,0,.18)}
+.modal-hd{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.modal-hd h3{font-size:15px;font-weight:600}
+.modal-x{width:28px;height:28px;border:none;background:none;font-size:17px;cursor:pointer;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--t2);transition:all .15s}
+.modal-x:hover{background:#F2F3F5;color:var(--t1)}
+.modal-bd{padding:18px 20px;overflow-y:auto;flex:1}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:12px;font-weight:500;color:var(--t2);margin-bottom:5px}
+.fg input,.fg select,.fg textarea{width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;outline:none;font-family:inherit;transition:border-color .15s,box-shadow .15s}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(22,119,255,.1)}
+.modal-ft{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end}
+
+/* === Toast === */
+.toast{position:fixed;top:20px;right:20px;padding:12px 20px;background:#1D2129;color:#fff;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;opacity:0;transform:translateY(-8px);transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+.toast.show{opacity:1;transform:translateY(0)}
+.toast.ok{background:var(--ok)}
+.toast.err{background:var(--err)}
+
+/* === Responsive === */
+@media(max-width:768px){
+  .app-header{padding:0 14px;height:52px}
+  .app-header h1{font-size:15px;gap:8px}
+  .app-header h1 .logo{width:26px;height:26px;font-size:13px}
+  .list-toolbar{padding:12px}
+  .list-head{display:none}
+  .item-list{padding:8px}
+  .lrow{flex-wrap:wrap;gap:6px 12px;padding:12px}
+  .lrow-main{flex:1 1 100%}
+  .lrow-cnt,.lrow-time{width:auto;text-align:left}
+  .list-count{margin-left:0;width:100%}
+  .cnt-header{padding:12px 14px 0}
+  .cnt-title{font-size:15px}
+  .tab{padding:7px 12px;font-size:12px}
+  .tab-body{padding:14px}
+  .act-bar{padding:10px 14px}
+}
+
+/* === Print === */
+@media print{
+  .app-header,.list-toolbar,.list-head,.pag,.act-bar,.tabs,.modal-bg,.toast{display:none!important}
+  .app-body{display:block!important;overflow:visible}
+  .app-body[data-view="list"] .page-list{display:flex!important}
+  .app-body[data-view="list"] .content{display:none!important}
+  .app-body[data-view="detail"] .page-list{display:none!important}
+  .app-body[data-view="detail"] .content{display:flex!important}
+  .page-list,.content{overflow:visible}
+  .item-list,.tab-body{overflow:visible;padding:0}
+  .sc-bd,.reg-bd{display:block!important}
+  body{background:#fff;height:auto;overflow:visible}
+}
+
+/* 条件分类展示 */
+.cond-summary{background:#f0f7ff;border:1px solid #d0e3ff;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:14px;color:#333}
+.cond-summary b{color:#1677FF}
+.prohib-count{color:#d32f2f!important}
+.prohibition-section{background:#fff8f0;border:1px solid #ffe0b2;border-radius:8px;padding:12px;margin-bottom:12px}
+.prohibition-header{font-size:15px;font-weight:600;color:#e65100;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #ffe0b2}
+.prohibition-item{background:#fff3e0;border-left:3px solid #ff9800;padding:8px 12px;margin-bottom:6px;border-radius:0 6px 6px 0;font-size:13px;line-height:1.6;color:#333}
+.prohibition-text{color:#bf360c}
+.prohibition-note{margin-top:4px;font-size:12px;color:#795548;background:#fff8e1;padding:4px 8px;border-radius:4px}
+.prohib-row{border-left:3px solid #ff9800!important}
+.type-group{margin-bottom:10px;border:1px solid #e0e0e0;border-radius:8px;overflow:hidden}
+.type-group-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fafafa;cursor:pointer;user-select:none;border-bottom:1px solid #e0e0e0}
+.type-group-header:hover{background:#f0f0f0}
+.tg-label{font-size:14px;font-weight:600;color:#333}
+.tg-count{font-size:12px;color:#666;background:#e8e8e8;padding:2px 8px;border-radius:10px}
+.tg-toggle{font-size:12px;color:#999;transition:transform .2s}
+.type-group-body{padding:8px}
+.type-group-body.collapsed{display:none}
+.sub-group-label{font-size:12px;color:#555;font-weight:500;padding:6px 8px 4px;margin-top:4px;border-top:1px dashed #eee}
+.sub-group-label:first-child{border-top:none;margin-top:0}
+.sg-count{font-size:11px;color:#888;margin-left:4px}
+.cd-tag.type{background:#e8f5e9;color:#2e7d32;font-size:11px}
+.sc-footer-info{margin-top:8px;padding:8px;background:#f5f5f5;border-radius:6px;font-size:13px}
+.sc-scenario-name{font-weight:500;color:#555;margin-bottom:4px}
+</style>
 </head>
 <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-</body>
-</html>
+<div id="dim-tip" style="opacity: 0;"></div>
+<header class="app-header">
+<h1><span class="logo">📋</span>事项数据管理系统</h1>
+<a href="https://static.coze.site/7625854171643855145-data_volume/files/%E6%89%80%E6%9C%89%E5%AF%B9%E8%AF%9D/%E4%B8%BB%E5%AF%B9%E8%AF%9D/%E4%B8%89%E6%96%B9%E6%96%87%E4%BB%B6/stats.html" style="color:#fff;font-size:12px;background:rgba(255,255,255,.18);padding:5px 12px;border-radius:14px;white-space:nowrap">📊 数据统计</a>
+<span class="stats" id="hStats">共 0 个事项 · 条件 0 · 法规 0 · 表单 0 · 材料 0</span>
+</header>
+
+<div class="app-body" id="appBody" data-view="list">
+<section class="page-list" aria-label="事项列表">
+<div class="list-toolbar">
+<div class="list-search"><input type="search" id="sInput" placeholder="搜索事项名称、实施部门、事项编码…" aria-label="搜索事项"></div>
+<div class="list-filters">
+<div class="filter-bar" id="fBar">
+<button class="fbtn on" data-f="all">全部</button>
+<button class="fbtn" data-f="cond">有受理条件</button>
+<button class="fbtn" data-f="reg">有法规</button>
+<button class="fbtn" data-f="fld">有表单</button>
+</div>
+<select id="areaFilter" aria-label="按区域筛选"><option value="">全部区域</option><option value="广东省深圳市">市本级 (3838)</option><option value="广东省深圳市南山区">南山区 (883)</option><option value="广东省深圳市福田区">福田区 (867)</option><option value="广东省深圳市罗湖区">罗湖区 (996)</option><option value="广东省深圳市宝安区">宝安区 (927)</option><option value="广东省深圳市龙岗区">龙岗区 (1026)</option><option value="广东省深圳市龙华区">龙华区 (1011)</option><option value="广东省深圳市盐田区">盐田区 (879)</option><option value="广东省深圳市光明区">光明区 (921)</option><option value="广东省深圳市坪山区">坪山区 (867)</option><option value="广东省深圳市大鹏新区">大鹏新区 (804)</option><option value="广东省深圳市深汕特别合作区">深汕特别合作区 (826)</option><option value="广东省深圳市前海蛇口自贸片区">前海蛇口自贸片区 (534)</option></select>
+<select id="typeFilter" aria-label="按类型筛选"><option value="">全部类型</option><option value="行政许可">行政许可 (6303)</option><option value="公共服务">公共服务 (4110)</option><option value="其他行政权力">其他行政权力 (2636)</option><option value="行政给付">行政给付 (530)</option><option value="行政确认">行政确认 (505)</option><option value="行政征收">行政征收 (195)</option><option value="行政奖励">行政奖励 (56)</option><option value="行政裁决">行政裁决 (30)</option></select>
+<select id="sortBy" aria-label="排序方式">
+<option value="name">按名称排序</option>
+<option value="updated">按更新时间排序</option>
+</select>
+<span class="list-count" id="lCount">共 <b>0</b> 个事项</span>
+</div>
+</div>
+<div class="list-head">
+<span class="lh-name">事项名称</span>
+<span class="lh-cnt">数据项</span>
+<span class="lh-time">更新时间</span>
+</div>
+<div class="item-list" id="iList" role="listbox" aria-label="事项列表"><div class="lrow" data-code="SZ_03452" role="option" onclick="sel('SZ_03452')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“两业”融合示范发展项目</div><div class="lrow-sub"><span>深圳市工业和信息化局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_03452</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 14</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_00173" role="option" onclick="sel('SZ_00173')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e0f7fa;color:#00708a">行政确认</span>“两规”处理房地产权登记</div><div class="lrow-sub"><span>深圳市规划和自然资源局（深圳市海洋渔业局、深圳市林业局）</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_00173</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 8</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_02730" role="option" onclick="sel('SZ_02730')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>“个人破产一件事”社保缴费记录查询</div><div class="lrow-sub"><span>深圳市税务局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_02730</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_03419" role="option" onclick="sel('SZ_03419')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>“创客中国”（深圳）创新创业大赛获奖奖励项目</div><div class="lrow-sub"><span>深圳市工业和信息化局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_03419</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_13166" role="option" onclick="sel('SZ_13166')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市大鹏新区住房和建设局（深圳市大鹏新区城市更新和土地整备局）</span><span style="opacity:.45">·</span><span>大鹏新区</span><span style="opacity:.45">·</span><span>SZ_13166</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_07695" role="option" onclick="sel('SZ_07695')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市龙岗区住房和建设局</span><span style="opacity:.45">·</span><span>龙岗区</span><span style="opacity:.45">·</span><span>SZ_07695</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="NS_HJ_001" role="option" onclick="sel('NS_HJ_001')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市南山区住房和建设局</span><span style="opacity:.45">·</span><span>南山区</span><span style="opacity:.45">·</span><span>NS_HJ_001</span></div></div><div class="lrow-cnt"><span class="has">✓ 条件 1</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_11097" role="option" onclick="sel('SZ_11097')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市坪山区住房保障中心</span><span style="opacity:.45">·</span><span>坪山区</span><span style="opacity:.45">·</span><span>SZ_11097</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_04194" role="option" onclick="sel('SZ_04194')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市罗湖区住房和建设局</span><span style="opacity:.45">·</span><span>罗湖区</span><span style="opacity:.45">·</span><span>SZ_04194</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_11619" role="option" onclick="sel('SZ_11619')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市光明区住房和建设局</span><span style="opacity:.45">·</span><span>光明区</span><span style="opacity:.45">·</span><span>SZ_11619</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_05140" role="option" onclick="sel('SZ_05140')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市福田区住房和建设局（深圳市福田区城市更新和土地整备局）</span><span style="opacity:.45">·</span><span>福田区</span><span style="opacity:.45">·</span><span>SZ_05140</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_09724" role="option" onclick="sel('SZ_09724')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市龙华区住房和建设局</span><span style="opacity:.45">·</span><span>龙华区</span><span style="opacity:.45">·</span><span>SZ_09724</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_07126" role="option" onclick="sel('SZ_07126')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“工改保”用地建设保障性住房纳入保障性安居工程建设计划及建设标准批复</div><div class="lrow-sub"><span>深圳市宝安区住房和建设局</span><span style="opacity:.45">·</span><span>宝安区</span><span style="opacity:.45">·</span><span>SZ_07126</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 9</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_00072" role="option" onclick="sel('SZ_00072')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“新型冠状病毒感染应急防治”专项项目验收</div><div class="lrow-sub"><span>深圳市科技创新局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_00072</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 20</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_03461" role="option" onclick="sel('SZ_03461')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>“智改数转”应用示范标杆项目</div><div class="lrow-sub"><span>深圳市工业和信息化局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_03461</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_02026" role="option" onclick="sel('SZ_02026')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>“深圳标准创新基地”项目</div><div class="lrow-sub"><span>深圳市市场监督管理局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_02026</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_02812" role="option" onclick="sel('SZ_02812')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>“深圳购物季”促消费活动事后资助项目</div><div class="lrow-sub"><span>深圳市商务局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_02812</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 4</span><span class="has">📄 13</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_03069" role="option" onclick="sel('SZ_03069')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#fce4ec;color:#c62828">行政给付</span>“深圳飞”旅客出行服务及宣传推介资助项目</div><div class="lrow-sub"><span>深圳市交通运输局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_03069</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 11</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_01034" role="option" onclick="sel('SZ_01034')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>（15日内）劳动能力鉴定复查申请</div><div class="lrow-sub"><span>深圳市人力资源和社会保障局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_01034</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_01035" role="option" onclick="sel('SZ_01035')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>（1年后）劳动能力复查鉴定申请</div><div class="lrow-sub"><span>深圳市人力资源和社会保障局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_01035</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_12217" role="option" onclick="sel('SZ_12217')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#f3e5f5;color:#7b1fa2">其他行政权力</span>（出具《付清地价款证明》（新申请））</div><div class="lrow-sub"><span>前海蛇口自贸片区管委会（前海管理局）</span><span style="opacity:.45">·</span><span>前海蛇口自贸片区</span><span style="opacity:.45">·</span><span>SZ_12217</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 8</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_02851" role="option" onclick="sel('SZ_02851')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>（发展内贸促消费方向）消费枢纽建设事项-粤港澳大湾区老字号（文化）博览会项目</div><div class="lrow-sub"><span>深圳市商务局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_02851</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 10</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_02852" role="option" onclick="sel('SZ_02852')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>（发展内贸促消费方向）消费枢纽建设项目</div><div class="lrow-sub"><span>深圳市商务局</span><span style="opacity:.45">·</span><span>市本级</span><span style="opacity:.45">·</span><span>SZ_02852</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 13</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_12796" role="option" onclick="sel('SZ_12796')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市大鹏新区统战和社会建设局</span><span style="opacity:.45">·</span><span>大鹏新区</span><span style="opacity:.45">·</span><span>SZ_12796</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_10548" role="option" onclick="sel('SZ_10548')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市坪山区民政局</span><span style="opacity:.45">·</span><span>坪山区</span><span style="opacity:.45">·</span><span>SZ_10548</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_09606" role="option" onclick="sel('SZ_09606')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市龙华区民政局</span><span style="opacity:.45">·</span><span>龙华区</span><span style="opacity:.45">·</span><span>SZ_09606</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_07058" role="option" onclick="sel('SZ_07058')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市宝安区残疾人联合会</span><span style="opacity:.45">·</span><span>宝安区</span><span style="opacity:.45">·</span><span>SZ_07058</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_11324" role="option" onclick="sel('SZ_11324')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市光明区民政局</span><span style="opacity:.45">·</span><span>光明区</span><span style="opacity:.45">·</span><span>SZ_11324</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="NS_CL_001" role="option" onclick="sel('NS_CL_001')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市南山区残疾人联合会</span><span style="opacity:.45">·</span><span>南山区</span><span style="opacity:.45">·</span><span>NS_CL_001</span></div></div><div class="lrow-cnt"><span class="has">✓ 条件 1</span><span class="has">✓ 法规 2</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-21 03:47</div></div><div class="lrow" data-code="SZ_08650" role="option" onclick="sel('SZ_08650')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市盐田区民政局</span><span style="opacity:.45">·</span><span>盐田区</span><span style="opacity:.45">·</span><span>SZ_08650</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_04525" role="option" onclick="sel('SZ_04525')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市罗湖区残疾人联合会</span><span style="opacity:.45">·</span><span>罗湖区</span><span style="opacity:.45">·</span><span>SZ_04525</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_08154" role="option" onclick="sel('SZ_08154')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》信息查询（广东省内）</div><div class="lrow-sub"><span>深圳市龙岗区残疾人联合会</span><span style="opacity:.45">·</span><span>龙岗区</span><span style="opacity:.45">·</span><span>SZ_08154</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="">○ 法规 0</span><span class="has">📄 1</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_04520" role="option" onclick="sel('SZ_04520')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市罗湖区残疾人联合会</span><span style="opacity:.45">·</span><span>罗湖区</span><span style="opacity:.45">·</span><span>SZ_04520</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_09601" role="option" onclick="sel('SZ_09601')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市龙华区民政局</span><span style="opacity:.45">·</span><span>龙华区</span><span style="opacity:.45">·</span><span>SZ_09601</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_08149" role="option" onclick="sel('SZ_08149')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市龙岗区残疾人联合会</span><span style="opacity:.45">·</span><span>龙岗区</span><span style="opacity:.45">·</span><span>SZ_08149</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_05442" role="option" onclick="sel('SZ_05442')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市福田区残疾人联合会</span><span style="opacity:.45">·</span><span>福田区</span><span style="opacity:.45">·</span><span>SZ_05442</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_08645" role="option" onclick="sel('SZ_08645')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市盐田区民政局</span><span style="opacity:.45">·</span><span>盐田区</span><span style="opacity:.45">·</span><span>SZ_08645</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_07053" role="option" onclick="sel('SZ_07053')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市宝安区残疾人联合会</span><span style="opacity:.45">·</span><span>宝安区</span><span style="opacity:.45">·</span><span>SZ_07053</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_10543" role="option" onclick="sel('SZ_10543')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市坪山区民政局</span><span style="opacity:.45">·</span><span>坪山区</span><span style="opacity:.45">·</span><span>SZ_10543</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_11319" role="option" onclick="sel('SZ_11319')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市光明区民政局</span><span style="opacity:.45">·</span><span>光明区</span><span style="opacity:.45">·</span><span>SZ_11319</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 7</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="NS_CL_002" role="option" onclick="sel('NS_CL_002')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市南山区残疾人联合会</span><span style="opacity:.45">·</span><span>南山区</span><span style="opacity:.45">·</span><span>NS_CL_002</span></div></div><div class="lrow-cnt"><span class="has">✓ 条件 1</span><span class="has">✓ 法规 3</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_12791" role="option" onclick="sel('SZ_12791')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》到期换证</div><div class="lrow-sub"><span>深圳市大鹏新区统战和社会建设局</span><span style="opacity:.45">·</span><span>大鹏新区</span><span style="opacity:.45">·</span><span>SZ_12791</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 1</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_04521" role="option" onclick="sel('SZ_04521')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市罗湖区残疾人联合会</span><span style="opacity:.45">·</span><span>罗湖区</span><span style="opacity:.45">·</span><span>SZ_04521</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_12792" role="option" onclick="sel('SZ_12792')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市大鹏新区统战和社会建设局</span><span style="opacity:.45">·</span><span>大鹏新区</span><span style="opacity:.45">·</span><span>SZ_12792</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_05443" role="option" onclick="sel('SZ_05443')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市福田区残疾人联合会</span><span style="opacity:.45">·</span><span>福田区</span><span style="opacity:.45">·</span><span>SZ_05443</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_09602" role="option" onclick="sel('SZ_09602')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市龙华区民政局</span><span style="opacity:.45">·</span><span>龙华区</span><span style="opacity:.45">·</span><span>SZ_09602</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 4</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_10544" role="option" onclick="sel('SZ_10544')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市坪山区民政局</span><span style="opacity:.45">·</span><span>坪山区</span><span style="opacity:.45">·</span><span>SZ_10544</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_11320" role="option" onclick="sel('SZ_11320')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市光明区民政局</span><span style="opacity:.45">·</span><span>光明区</span><span style="opacity:.45">·</span><span>SZ_11320</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="SZ_08150" role="option" onclick="sel('SZ_08150')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市龙岗区残疾人联合会</span><span style="opacity:.45">·</span><span>龙岗区</span><span style="opacity:.45">·</span><span>SZ_08150</span></div></div><div class="lrow-cnt"><span class="">○ 条件 0</span><span class="has">✓ 法规 2</span><span class="has">📄 3</span></div><div class="lrow-time">2026-10-20 17:17</div></div><div class="lrow" data-code="NS_CL_003" role="option" onclick="sel('NS_CL_003')"><div class="lrow-main"><div class="lrow-name"><span class="ltype" style="background:#e8f5e9;color:#2e7d32">公共服务</span>《中华人民共和国残疾人证》挂失补办</div><div class="lrow-sub"><span>深圳市南山区残疾人联合会</span><span style="opacity:.45">·</span><span>南山区</span><span style="opacity:.45">·</span><span>NS_CL_003</span></div></div><div class="lrow-cnt"><span class="has">✓ 条件 1</span><span class="has">✓ 法规 5</span><span class="has">📄 5</span></div><div class="lrow-time">2026-10-20 17:17</div></div></div>
+<div class="pag" id="pag"></div>
+</section>
+
+<main class="content" id="mainArea">
+<div class="empty"><div class="ei">📋</div><div class="et">请从列表中选择一个事项</div></div>
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="modal-bg" id="mBg" onclick="if(event.target===this)closeM()"><div class="modal" id="mBox"></div></div>
+
+<script>
+(function(){
+'use strict';
+var SUPA_URL='https://yhoiagabsftraufbinpa.supabase.co';
+var SUPA_KEY='sb_publishable_ngi2NNLWbWH92hTD_kLLJA_lTJQC3d9';
+var PS=50;
+var TM={text:'文本',number:'数字',date:'日期',select:'下拉选择',textarea:'多行文本',attachment:'附件上传',signature:'签名',image:'图片'};
+var EM={'自然人':'自然人','法人/企业':'法人/企业','社会组织':'社会组织','事业单位':'事业单位','其他':'其他','表单/申请':'表单/申请','空间/地址':'空间/地址','项目/事项':'项目/事项','证照/许可':'证照/许可','凭证':'凭证'};
+var EM_KEYS=['自然人','法人/企业','社会组织','事业单位','其他','表单/申请','空间/地址','项目/事项','证照/许可','凭证'];
+var EM_COLORS={'自然人':'#1677FF','法人/企业':'#e8710a','社会组织':'#9c27b0','事业单位':'#00897b','其他':'#78909c','表单/申请':'#6d4c9f','空间/地址':'#0d8050','项目/事项':'#c5221f','证照/许可':'#1a9da0','凭证':'#b35c00'};
+var items=[],filtered=[],cur=null,curTab=0,curF='all',page=1;
+var pageItems=[],totalFiltered=0;
+var view='list',sortBy='name',editedMap={};
+var qaData={};
+var fieldFilter={type:'',std:'',ent:'',dim:''};
+window.fieldFilter=fieldFilter;
+var localEdits={};
+var STORAGE_KEY='entity_mgr_edits_v1';
+var useSupabase=true; // 尝试使用Supabase存储
+
+// 从Supabase加载编辑数据
+function loadEditsFromSupabase(){
+  if(!useSupabase||!SUPA_KEY)return Promise.resolve({});
+  return fetch(SUPA_URL+'/rest/v1/item_edits?select=item_code,edit_data,updated_at',{
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+  }).then(function(r){
+    if(!r.ok)throw new Error('Supabase查询失败');
+    return r.json();
+  }).then(function(rows){
+    var edits={};
+    for(var i=0;i<rows.length;i++){
+      edits[rows[i].item_code]=rows[i].edit_data;
+      if(rows[i].updated_at)editedMap[rows[i].item_code]=rows[i].updated_at;
+    }
+    return edits;
+  }).catch(function(e){
+    console.warn('Supabase加载失败，使用localStorage:',e.message);
+    useSupabase=false;
+    return loadLocalEdits();
+  });
+}
+
+// 保存编辑到Supabase
+function saveEditToSupabase(itemCode,editData){
+  if(!useSupabase||!SUPA_KEY)return Promise.resolve();
+  var headers={
+    'apikey':SUPA_KEY,
+    'Content-Type':'application/json',
+    'Authorization':'Bearer '+SUPA_KEY,
+    'Prefer':'return=representation'
+  };
+  // 先尝试PATCH更新，检查返回数据判断是否命中
+  return fetch(SUPA_URL+'/rest/v1/item_edits?item_code=eq.'+encodeURIComponent(itemCode),{
+    method:'PATCH',
+    headers:headers,
+    body:JSON.stringify({
+      edit_data:editData,
+      updated_at:new Date().toISOString()
+    })
+  }).then(function(r){
+    if(!r.ok)throw new Error('PATCH失败:'+r.status);
+    return r.json();
+  }).then(function(rows){
+    if(rows&&rows.length>0)return rows;
+    // PATCH没命中，插入新记录
+    return fetch(SUPA_URL+'/rest/v1/item_edits',{
+      method:'POST',
+      headers:{'apikey':SUPA_KEY,'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY,'Prefer':'return=representation'},
+      body:JSON.stringify({
+        item_code:itemCode,
+        edit_data:editData,
+        updated_at:new Date().toISOString()
+      })
+    }).then(function(r){
+      if(!r.ok){
+        // 可能是并发插入导致唯一约束冲突，再PATCH一次
+        if(r.status===409){
+          return fetch(SUPA_URL+'/rest/v1/item_edits?item_code=eq.'+encodeURIComponent(itemCode),{
+            method:'PATCH',
+            headers:{'apikey':SUPA_KEY,'Content-Type':'application/json','Authorization':'Bearer '+SUPA_KEY},
+            body:JSON.stringify({edit_data:editData,updated_at:new Date().toISOString()})
+          });
+        }
+        throw new Error('INSERT失败:'+r.status);
+      }
+      return r.json();
+    });
+  }).catch(function(e){
+    console.error('Supabase保存异常:',e);
+    useSupabase=false;
+  });
+}
+
+function loadLocalEdits(){
+  try{var s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);}catch(e){}
+  return {};
+}
+function saveLocalEdits(edits){
+  try{localStorage.setItem(STORAGE_KEY,JSON.stringify(edits));}catch(e){}
+}
+function persistItem(it){
+  var editData=JSON.parse(JSON.stringify(it));
+  // 同时保存到localStorage和Supabase
+  var edits=loadLocalEdits();
+  edits[it.c]=editData;
+  saveLocalEdits(edits);
+  // 异步保存到Supabase
+  saveEditToSupabase(it.c,editData);
+}
+function clearLocalEdits(){
+  localStorage.removeItem(STORAGE_KEY);
+  // 清除Supabase数据
+  if(useSupabase&&SUPA_KEY){
+    fetch(SUPA_URL+'/rest/v1/item_edits',{
+      method:'DELETE',
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY}
+    }).catch(function(e){console.warn('Supabase清除失败:',e.message);});
+  }
+  toast('本地缓存已清除，重新加载原始数据','ok');
+  loadData();
+}
+window.clearLocalEdits=clearLocalEdits;
+
+function esc(s){if(!s)return '';var d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+function toast(m,t){var e=document.getElementById('toast');e.textContent=m;e.className='toast show'+(t?' '+t:'');setTimeout(function(){e.className='toast';},2500);}
+
+function getRegs(it){return it.regs||it.r||[];}
+function getRegCount(it){var r=getRegs(it);return r?r.length:0;}
+
+/* === 法规库关联 === */
+var regsLibMap={};  // name -> full regulation object
+function enrichRegs(slimRegs){
+  if(!slimRegs||!slimRegs.length)return [];
+  var result=[];
+  for(var i=0;i<slimRegs.length;i++){
+    var sr=slimRegs[i];
+    var name=sr.name||sr.regulation_name||'';
+    var full=regsLibMap[name];
+    if(full){
+      // 合并：完整法规库数据 + 事项特有的引用条款
+      var enriched=JSON.parse(JSON.stringify(full));
+      if(sr.ref_clauses)enriched.ref_clauses=sr.ref_clauses;
+      if(sr._rc&&!enriched.ref_clauses)enriched._rc=sr._rc;
+      result.push(enriched);
+    } else {
+      // 法规库中没有，保留原始数据（slim或legacy格式）
+      result.push(sr);
+    }
+  }
+  return result;
+}
+
+/* === dbApi: Supabase REST API 查询封装 === */
+var dbApi={
+  _h:function(){return {'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY};},
+  _cnt:function(h){var v=h['content-range']||h['Content-Range']||'';var m=v.match(/\/(\d+)$/);return m?parseInt(m[1],10):0;},
+  queryItems:function(page,pageSize,filters){
+    filters=filters||{};
+    var ord=(filters.sort==='updated')?'updated_at.desc':'name.asc';
+    var sel='code,name,dept_full_name,item_type,item_type_full,area_name,parent_item_name,accept_conditions_official,online_service,exercise_level,official_code,updated_at';
+    if(filters.hasReg===true)sel+=',svc_item_regulations!inner(id)';
+    if(filters.hasForm===true)sel+=',svc_item_forms!inner(id)';
+    var params=['select='+sel,'order='+ord,'limit='+pageSize,'offset='+((page-1)*pageSize)];
+    if(filters.search){var sq=encodeURIComponent(filters.search);params.push('or=(code.ilike.%25'+sq+'%25,name.ilike.%25'+sq+'%25,dept_full_name.ilike.%25'+sq+'%25,official_code.ilike.%25'+sq+'%25)');}
+    if(filters.type)params.push('item_type=eq.'+encodeURIComponent(filters.type));
+    if(filters.area)params.push('area_name=ilike.%25'+encodeURIComponent(filters.area)+'%25');
+    if(filters.hasCond===true)params.push('accept_conditions_official=not.is.null');
+    var h=Object.assign(this._h(),{'Prefer':'count=exact'});
+    return fetch(SUPA_URL+'/rest/v1/svc_items?'+params.join('&'),{headers:h}).then(function(r){
+      if(!r.ok)throw new Error('查询失败:'+r.status);
+      var total=dbApi._cnt(r.headers);
+      return r.json().then(function(rows){
+        if(!rows.length) return {items:[],total:total,page:page};
+        var codes=rows.map(function(r){return r.code;});
+        var codeQ=encodeURIComponent('('+codes.join(',')+')');
+        // 批量查询材料/条件/法规数量
+        return Promise.all([
+          fetch(SUPA_URL+'/rest/v1/svc_item_materials?select=item_code&item_code=in.'+codeQ+'&limit=10000',{headers:dbApi._h()}).then(function(r){return r.ok?r.json():[];}),
+          fetch(SUPA_URL+'/rest/v1/svc_item_scenarios?select=item_code&item_code=in.'+codeQ+'&limit=10000',{headers:dbApi._h()}).then(function(r){return r.ok?r.json():[];}),
+          fetch(SUPA_URL+'/rest/v1/svc_item_regulations?select=item_code&item_code=in.'+codeQ+'&limit=10000',{headers:dbApi._h()}).then(function(r){return r.ok?r.json():[];})
+        ]).then(function(counts){
+          var mc={},sc2={},rc={};
+          counts[0].forEach(function(r){mc[r.item_code]=(mc[r.item_code]||0)+1;});
+          counts[1].forEach(function(r){sc2[r.item_code]=(sc2[r.item_code]||0)+1;});
+          counts[2].forEach(function(r){rc[r.item_code]=(rc[r.item_code]||0)+1;});
+          rows.forEach(function(row){
+            row.material_count=mc[row.code]||0;
+            row.sc_count=sc2[row.code]||0;
+            row.reg_count=rc[row.code]||0;
+          });
+          return {items:rows,total:total,page:page};
+        });
+      });
+    });
+  },
+  getItemDetail:function(code){
+    var h=this._h();
+    var qItem=fetch(SUPA_URL+'/rest/v1/svc_items?code=eq.'+encodeURIComponent(code)+'&select=*',{headers:h}).then(function(r){return r.json();}).then(function(r){return r[0]||null;});
+    var qMats=fetch(SUPA_URL+'/rest/v1/svc_item_materials?item_code=eq.'+encodeURIComponent(code)+'&select=*&order=seq.asc',{headers:h}).then(function(r){return r.ok?r.json():[];});
+    var qRes=fetch(SUPA_URL+'/rest/v1/svc_item_results?item_code=eq.'+encodeURIComponent(code)+'&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];});
+    var qSc=fetch(SUPA_URL+'/rest/v1/svc_item_scenarios?item_code=eq.'+encodeURIComponent(code)+'&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];});
+    var qIR=fetch(SUPA_URL+'/rest/v1/svc_item_regulations?item_code=eq.'+encodeURIComponent(code)+'&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];});
+    var qF=fetch(SUPA_URL+'/rest/v1/svc_item_forms?item_code=eq.'+encodeURIComponent(code)+'&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];});
+    return Promise.all([qItem,qMats,qRes,qSc,qIR,qF]).then(function(results){
+      var row=results[0],mats=results[1],ress=results[2],scs=results[3],iregs=results[4],forms=results[5];
+      if(!row)throw new Error('事项不存在');
+      // 收集所有不重复法规名称，批量从 svc_regulations 取全文
+      var regNames=[];var regNameSet={};
+      for(var i=0;i<iregs.length;i++){var nm=iregs[i].regulation_name;if(nm&&!regNameSet[nm]){regNameSet[nm]=true;regNames.push(nm);}}
+      // 同时收集有 regulation_id 的（兼容旧数据）
+      var regIds=[];for(var i=0;i<iregs.length;i++){if(iregs[i].regulation_id)regIds.push(iregs[i].regulation_id);}
+      var fullRegsPromise=(regNames.length?fetch(SUPA_URL+'/rest/v1/svc_regulations?name=in.('+regNames.map(function(n){return encodeURIComponent(n);}).join(',')+')&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];}):Promise.resolve([]));
+      var artsPromise=(regIds.length?fetch(SUPA_URL+'/rest/v1/svc_regulations?id=in.('+regIds.join(',')+')&select=*',{headers:h}).then(function(r){return r.ok?r.json():[];}):Promise.resolve([]));
+      return Promise.all([fullRegsPromise,artsPromise]).then(function(regResults){
+        var fullRegs=regResults[0],idRegs=regResults[1];
+        // 填充 regsLibMap（按名称）
+        for(var i=0;i<fullRegs.length;i++){var reg=fullRegs[i];if(typeof reg.articles==='string'){try{reg.articles=JSON.parse(reg.articles);}catch(e){reg.articles=[];}}regsLibMap[reg.name]=reg;}
+        // 填充 artsMap（按ID，兼容）
+        var artsMap={};for(var i=0;i<idRegs.length;i++){var reg=idRegs[i];if(typeof reg.articles==='string'){try{reg.articles=JSON.parse(reg.articles);}catch(e){reg.articles=[];}}artsMap[reg.id]=reg.articles||[];}
+        // 构建基础 item
+        var item={c:row.code,n:row.name,d:row.dept_full_name||row.dept_name,s:row.accept_scope_object,area_name:row.area_name,dept_full_name:row.dept_full_name,parent_item_name:row.parent_item_name,sub_item_name:row.sub_item_name,impl_list_name:row.impl_list_name,item_type:row.item_type,item_type_full:row.item_type_full,official_code:row.official_code,basic_code:row.basic_code,legal_time_limit:row.legal_time_limit,promise_time_limit:row.promise_time_limit,apply_time_limit:row.apply_time_limit,accept_time_limit:row.accept_time_limit,online_url:row.online_url,onsite_visits:row.onsite_visits,onsite_reason:row.onsite_reason,is_one_window:row.is_one_window,is_comprehensive_window:row.is_comprehensive_window,is_in_hall:row.is_in_hall,has_pre_license:row.has_pre_license,pre_license_items:row.pre_license_items,has_intermediary:row.has_intermediary,intermediary_code:row.intermediary_code,intermediary_name:row.intermediary_name,online_service:row.online_service,exercise_level:row.exercise_level,accept_conditions_official:row.accept_conditions_official,ot:row.accept_conditions_original,industry_dept:row.industry_dept,item_status:row.item_status,power_source:row.power_source,case_type:row.case_type,handling_form:row.handling_form,online_depth:row.online_depth,is_convenience:row.is_convenience,is_cross_handling:row.is_cross_handling,cross_handling_type:row.cross_handling_type,cross_handling_area:row.cross_handling_area,service_object:row.service_object,quantity_limit:row.quantity_limit,legal_time_desc:row.legal_time_desc,promise_time_desc:row.promise_time_desc,is_fee:row.is_fee,fee_items:row.fee_items,payment_method:row.payment_method,consultation_phone:row.consultation_phone,complaint_phone:row.complaint_phone,responsible_office:row.responsible_office,admin_review_dept:row.admin_review_dept,admin_review_phone:row.admin_review_phone,litigation_dept:row.litigation_dept,litigation_phone:row.litigation_phone,support_deficiency_accept:row.support_deficiency_accept,support_instant_approval:row.support_instant_approval,support_commitment:row.support_commitment,online_process_desc:row.online_process_desc,window_process_desc:row.window_process_desc,review_standard:row.review_standard,approval_conditions:row.approval_conditions,rejection_conditions:row.rejection_conditions,process_steps:row.process_steps,process_step_count:row.process_step_count,responsibilities:row.responsibilities,daily_language:row.daily_language,short_name:row.short_name,subject_category:row.subject_category};
+        // 材料
+        item.materials=[];for(var i=0;i<mats.length;i++){var m=mats[i];item.materials.push({name:m.name||'',type:m.type||m.material_category||'',required:m.required||m.material_necessity||'必要',original:m.original,copy:m.copy,format:m.format||m.material_form||'',source:m.source||m.source_channel||'',form_type:m.form_type||'',seq:m.seq,material_id:m.material_id||'',form_or_material:m.form_or_material||'',material_form:m.material_form||'',exempt:m.exempt,exempt_measure:m.exempt_measure||'',should_link_cert:m.should_link_cert||'',link_cert:m.link_cert||'',cert_name:m.cert_name||'',paper_score:m.paper_score,paper_spec:m.paper_spec||'',fill_notes:m.fill_notes||'',accept_standard:m.accept_standard||''});}
+        // 办事结果
+        item.results=[];for(var i=0;i<ress.length;i++){var rs=ress[i];item.results.push({name:rs.name||rs.result_name,type:rs.type||rs.result_type||'',id:rs.id});}
+        // 受理条件(scenarios)
+        item.sc=[];for(var i=0;i<scs.length;i++){var sc=scs[i];var conds=sc.conditions;if(typeof conds==='string'){try{conds=JSON.parse(conds);}catch(e){conds=[];}}item.sc.push({scenario_id:sc.scenario_id,scenario_name:sc.scenario_name,conditions:conds||[],logic_formula:sc.logic_formula,action:sc.action,evaluation:sc.evaluation});}
+        // 政策依据(regulations) - 用 regsLibMap 匹配完整法规数据
+        item.regs=[];for(var i=0;i<iregs.length;i++){var ir=iregs[i];var nm=ir.regulation_name||'';var full=regsLibMap[nm]||null;if(full){var enriched=JSON.parse(JSON.stringify(full));enriched.num=enriched.doc_number||'';if(ir.ref_clauses)enriched.ref_clauses=ir.ref_clauses;item.regs.push(enriched);}else if(ir.regulation_id&&artsMap[ir.regulation_id]){item.regs.push({name:nm,num:ir.doc_number||'',doc_number:ir.doc_number||'',articles:artsMap[ir.regulation_id],ref_clauses:ir.ref_clauses});}else{item.regs.push({name:nm,num:ir.doc_number||'',doc_number:ir.doc_number||'',ref_clauses:ir.ref_clauses});}}
+        // 申请表(forms)
+        if(forms.length>0){var fd=forms[0].fields;if(typeof fd==='string'){try{fd=JSON.parse(fd);}catch(e){fd=[];}}item.f=fd||[];item.fn=forms[0].form_name||'';item.fid=forms[0].id;}else{item.f=[];item.fn='';item.fid=null;}
+        return item;
+      });
+    });
+  },
+  getRegulation:function(name){
+    if(regsLibMap[name])return Promise.resolve(regsLibMap[name]);
+    return fetch(SUPA_URL+'/rest/v1/svc_regulations?name=eq.'+encodeURIComponent(name)+'&select=*',{headers:this._h()}).then(function(r){return r.json();}).then(function(rows){if(!rows.length)return null;var reg=rows[0];if(typeof reg.articles==='string'){try{reg.articles=JSON.parse(reg.articles);}catch(e){reg.articles=[];}}regsLibMap[name]=reg;return reg;});
+  },
+  getQA:function(itemCode){
+    return fetch(SUPA_URL+'/rest/v1/svc_item_qa?item_code=eq.'+encodeURIComponent(itemCode)+'&select=*',{headers:this._h()}).then(function(r){if(!r.ok)return [];return r.json();}).then(function(rows){var qa=[];for(var i=0;i<rows.length;i++){var r=rows[i];qa.push({q:r.question,a:r.answer,ref_name:r.reference_name||'',ref_url:r.reference_url||''});}return qa;});
+  },
+  getStats:function(filters){
+    var h=Object.assign(this._h(),{'Prefer':'count=exact'});
+    var _p=function(qs){
+      var s=(typeof qs==='string')?qs:qs.join('&');
+      return fetch(SUPA_URL+'/rest/v1/svc_items?'+s,{headers:h});
+    };
+    var _c=function(r){return dbApi._cnt(r.headers);};
+    var base=['select=code','limit=1'];
+    if(filters&&filters.search){var sq=encodeURIComponent(filters.search);base.push('or=(code.ilike.%25'+sq+'%25,name.ilike.%25'+sq+'%25,dept_full_name.ilike.%25'+sq+'%25,official_code.ilike.%25'+sq+'%25)');}
+    if(filters&&filters.type)base.push('item_type=eq.'+encodeURIComponent(filters.type));
+    if(filters&&filters.area)base.push('area_name=ilike.%25'+encodeURIComponent(filters.area)+'%25');
+    var bStr=base.join('&');
+    var pTotal=_p(bStr);
+    var pWC=_p(bStr+'&accept_conditions_official=not.is.null');
+    var bSel=bStr.replace('limit=1','limit=0');
+    var pWR=_p(bSel.replace('select=code','select=code,svc_item_regulations!inner(id)'));
+    var pWF=_p(bStr.replace('select=code','select=code,svc_item_forms!inner(id)'));
+    var pMat=_p(bSel.replace('select=code','select=code,svc_item_materials!inner(id)'));
+    return Promise.all([pTotal,pWC,pWR,pWF,pMat]).then(function(r){
+      return {total:_c(r[0]),withCond:_c(r[1]),withReg:_c(r[2]),withForm:_c(r[3]),materials:_c(r[4])};
+    }).catch(function(e){console.warn('getStats error:',e);return {total:0,withCond:0,withReg:0,withForm:0,materials:0};});
+  }
+};
+
+function loadData(){
+  // 从Supabase API加载数据
+  loadEditsFromSupabase().then(function(edits){
+    return dbApi.queryItems(1,PS,{}).then(function(result){
+      pageItems=result.items;totalFiltered=result.total;page=1;
+      // 为每个事项附加counts（用于侧边栏显示）
+      return dbApi.getStats({}).then(function(stats){
+        // 附加编辑数据
+        var editCount=0;
+        for(var i=0;i<pageItems.length;i++){
+          var it=pageItems[i];
+          if(edits&&edits[it.code]){
+            var keys=Object.keys(edits[it.code]);
+            for(var k=0;k<keys.length;k++){
+              if(keys[k]!=='c'&&keys[k]!=='n')it[keys[k]]=edits[it.code][keys[k]];
+            }
+            editCount++;
+          }
+        }
+        // 更新统计
+        document.getElementById('hStats').textContent='共 '+stats.total+' 个事项 · 条件 '+stats.withCond+' · 法规 '+stats.withReg+' · 表单 '+stats.withForm+' · 材料 '+stats.materials;
+        renderList();
+        populateFilters();
+        if(editCount>0)toast('已恢复 '+editCount+' 个事项的编辑数据 (云端)','ok');
+      });
+    });
+  }).catch(function(e){
+    document.getElementById('iList').innerHTML='<div class="empty"><div class="et">数据加载失败: '+esc(e.message)+'</div></div>';
+  });
+}
+
+function typeStyle(t){
+  if(t==='行政许可')return 'background:#e3f2fd;color:#1565c0';
+  if(t==='公共服务')return 'background:#e8f5e9;color:#2e7d32';
+  if(t==='行政给付')return 'background:#fce4ec;color:#c62828';
+  if(t==='行政确认')return 'background:#e0f7fa;color:#00708a';
+  return 'background:#f3e5f5;color:#7b1fa2';
+}
+
+function fmtTime(s){
+  if(!s)return '—';
+  var d=new Date(s);
+  if(isNaN(d.getTime()))return esc(String(s).slice(0,10));
+  var p=function(n){return (n<10?'0':'')+n;};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+}
+
+function renderList(){
+  var h='';
+  for(var i=0;i<pageItems.length;i++){
+    var it=pageItems[i];
+    var code=it.code;
+    var name=it.name||'';
+    var hc=it.sc_count>0,hr=it.reg_count>0;
+    var rc=it.reg_count||0,matC=it.material_count||0,scC=it.sc_count||0;
+    var typeTag=it.item_type?'<span class="ltype" style="'+typeStyle(it.item_type)+'">'+esc(it.item_type)+'</span>':'';
+    var subs=[];
+    if(it.dept_full_name)subs.push(esc(it.dept_full_name));
+    if(it.area_name)subs.push(esc(String(it.area_name).replace('广东省深圳市','')||'市本级'));
+    subs.push(esc(code));
+    var ed=editedMap[code];
+    var timeCell=ed?'<span class="edited" title="该事项已被人工编辑保存">✏️ '+fmtTime(ed)+'</span>':fmtTime(it.updated_at);
+    h+='<div class="lrow'+(cur&&cur.c===code?' sel':'')+'" data-code="'+code+'" role="option" onclick="sel(\''+code+'\')">'
+      +'<div class="lrow-main">'
+      +'<div class="lrow-name">'+typeTag+esc(name)+'</div>'
+      +'<div class="lrow-sub"><span>'+subs.join('</span><span style="opacity:.45">·</span><span>')+'</span></div>'
+      +'</div>'
+      +'<div class="lrow-cnt">'
+      +'<span class="'+(hc?'has':'')+'">'+(hc?'✓':'○')+' 条件 '+scC+'</span>'
+      +'<span class="'+(hr?'has':'')+'">'+(hr?'✓':'○')+' 法规 '+rc+'</span>'
+      +'<span class="'+(matC?'has':'')+'">📄 '+matC+'</span>'
+      +'</div>'
+      +'<div class="lrow-time">'+timeCell+'</div>'
+      +'</div>';
+  }
+  document.getElementById('iList').innerHTML=h||'<div class="empty"><div class="et">无匹配事项</div></div>';
+  var lc=document.getElementById('lCount');
+  if(lc)lc.innerHTML='共 <b>'+totalFiltered+'</b> 个事项';
+  renderPag();
+}
+
+function renderPag(){
+  var t=totalFiltered,p=Math.ceil(t/PS);
+  if(p<=1){document.getElementById('pag').innerHTML='';return;}
+  var h='<button '+(page<=1?'disabled':'')+' onclick="gp('+(page-1)+')">‹</button>';
+  var rng=pRange(page,p);
+  for(var i=0;i<rng.length;i++){
+    if(rng[i]==='…')h+='<span style="padding:0 3px;font-size:11px">…</span>';
+    else h+='<button class="'+(rng[i]===page?'cur':'')+'" onclick="gp('+rng[i]+')">'+rng[i]+'</button>';
+  }
+  h+='<button '+(page>=p?'disabled':'')+' onclick="gp('+(page+1)+')">›</button>';
+  document.getElementById('pag').innerHTML=h;
+}
+
+function pRange(c,t){
+  if(t<=7){var r=[];for(var i=1;i<=t;i++)r.push(i);return r;}
+  var r=[1];if(c>3)r.push('…');
+  for(var i=Math.max(2,c-1);i<=Math.min(t-1,c+1);i++)r.push(i);
+  if(c<t-2)r.push('…');r.push(t);return r;
+}
+
+window.gp=function(p){
+  page=p;
+  var filters={search:(document.getElementById('sInput').value||'').trim(),type:document.getElementById('typeFilter').value,area:document.getElementById('areaFilter').value,sort:sortBy};
+  if(curF==='cond')filters.hasCond=true;
+  if(curF==='reg')filters.hasReg=true;
+  if(curF==='fld')filters.hasForm=true;
+  document.getElementById('iList').innerHTML='<div class="empty"><div class="et">加载中…</div></div>';
+  document.getElementById('iList').scrollTop=0;
+  dbApi.queryItems(page,PS,filters).then(function(result){
+    pageItems=result.items;totalFiltered=result.total;
+    renderList();
+  }).catch(function(e){toast('加载失败:'+e.message,'err');});
+};
+
+function applyFilter(){
+  page=1;
+  var q=(document.getElementById('sInput').value||'').trim();
+  var areaVal=document.getElementById('areaFilter').value;
+  var typeVal=document.getElementById('typeFilter').value;
+  var filters={sort:sortBy};
+  if(q)filters.search=q;
+  if(areaVal)filters.area=areaVal;
+  if(typeVal)filters.type=typeVal;
+  if(curF==='cond')filters.hasCond=true;
+  if(curF==='reg')filters.hasReg=true;
+  if(curF==='fld')filters.hasForm=true;
+  document.getElementById('iList').innerHTML='<div class="empty"><div class="et">搜索中…</div></div>';
+  document.getElementById('iList').scrollTop=0;
+  dbApi.queryItems(1,PS,filters).then(function(result){
+    pageItems=result.items;totalFiltered=result.total;
+    renderList();
+  }).catch(function(e){
+    document.getElementById('iList').innerHTML='<div class="empty"><div class="et">查询失败</div></div>';
+  });
+}
+
+function populateFilters(){
+  var h=dbApi._h();
+  // 分页获取全部数据的类型和区域分布（API单次最多1000条）
+  var allTypes=[], allAreas=[];
+  function fetchPage(offset){
+    return Promise.all([
+      fetch(SUPA_URL+'/rest/v1/svc_items?select=item_type&limit=1000&offset='+offset,{headers:h}).then(function(r){return r.json();}),
+      fetch(SUPA_URL+'/rest/v1/svc_items?select=area_name&limit=1000&offset='+offset,{headers:h}).then(function(r){return r.json();})
+    ]).then(function(res){
+      allTypes=allTypes.concat(res[0]); allAreas=allAreas.concat(res[1]);
+      if(res[0].length===1000) return fetchPage(offset+1000);
+    });
+  }
+  fetchPage(0).then(function(){
+    // 类型统计
+    var typeCounts={};
+    for(var i=0;i<allTypes.length;i++){var t=allTypes[i].item_type;if(t)typeCounts[t]=(typeCounts[t]||0)+1;}
+    var typeArr=Object.keys(typeCounts).sort(function(a,b){return typeCounts[b]-typeCounts[a];});
+    var typeSel=document.getElementById('typeFilter');
+    while(typeSel.options.length>1)typeSel.remove(1);
+    for(var i=0;i<typeArr.length;i++){
+      var opt=document.createElement('option');
+      opt.value=typeArr[i];
+      opt.textContent=typeArr[i]+' ('+typeCounts[typeArr[i]]+')';
+      typeSel.appendChild(opt);
+    }
+    // 区域 - 从实际数据提取，去掉"广东省深圳市"前缀
+    var areaCounts={};
+    for(var i=0;i<allAreas.length;i++){var a=allAreas[i].area_name;if(a)areaCounts[a]=(areaCounts[a]||0)+1;}
+    var areaOrder=['广东省深圳市','广东省深圳市南山区','广东省深圳市福田区','广东省深圳市罗湖区','广东省深圳市宝安区','广东省深圳市龙岗区','广东省深圳市龙华区','广东省深圳市盐田区','广东省深圳市光明区','广东省深圳市坪山区','广东省深圳市大鹏新区','广东省深圳市深汕特别合作区','广东省深圳市前海蛇口自贸片区'];
+    var areaSel=document.getElementById('areaFilter');
+    while(areaSel.options.length>1)areaSel.remove(1);
+    for(var i=0;i<areaOrder.length;i++){
+      var full=areaOrder[i], short=full.replace('广东省深圳市','')||'市本级';
+      if(areaCounts[full]){
+        var opt=document.createElement('option');
+        opt.value=full;
+        opt.textContent=short+' ('+areaCounts[full]+')';
+        areaSel.appendChild(opt);
+      }
+    }
+  }).catch(function(e){console.warn('筛选器加载失败:',e);});
+}
+
+var _searchTimer=null;
+document.getElementById('sInput').addEventListener('input',function(){clearTimeout(_searchTimer);_searchTimer=setTimeout(applyFilter,350);});
+document.getElementById('areaFilter').addEventListener('change',applyFilter);
+document.getElementById('typeFilter').addEventListener('change',applyFilter);
+document.getElementById('sortBy').addEventListener('change',function(){sortBy=this.value;applyFilter();});
+var fBtns=document.querySelectorAll('.fbtn');
+for(var i=0;i<fBtns.length;i++){
+  fBtns[i].addEventListener('click',function(){
+    for(var j=0;j<fBtns.length;j++)fBtns[j].classList.remove('on');
+    this.classList.add('on');
+    curF=this.getAttribute('data-f');
+    applyFilter();
+  });
+}
+
+/* === 两级页面视图切换 === */
+function setView(v){
+  view=v;
+  var ab=document.getElementById('appBody');
+  if(ab)ab.setAttribute('data-view',v);
+  if(v==='detail'){
+    var m=document.getElementById('mainArea');
+    if(m)m.scrollTop=0;
+  }
+}
+window.setView=setView;
+
+window.backToList=function(){
+  setView('list');
+  cur=null;
+  var rows=document.querySelectorAll('.lrow');
+  for(var j=0;j<rows.length;j++)rows[j].classList.remove('sel');
+};
+
+window.sel=function(code){
+  // 高亮选中行并切到详情页
+  cur={c:code,n:'加载中…'};curTab=0;
+  var rows=document.querySelectorAll('.lrow');
+  for(var j=0;j<rows.length;j++){
+    rows[j].classList.toggle('sel',rows[j].getAttribute('data-code')===code);
+  }
+  setView('detail');
+  document.getElementById('mainArea').innerHTML='<div class="empty"><div class="ei">⏳</div><div class="et">正在加载事项详情…</div></div>';
+  dbApi.getItemDetail(code).then(function(detail){
+    // 叠加编辑数据
+    if(useSupabase){
+      loadEditsFromSupabase().then(function(edits){
+        if(edits&&edits[code]){
+          var keys=Object.keys(edits[code]);
+          for(var k=0;k<keys.length;k++){
+            if(keys[k]!=='c'&&keys[k]!=='n')detail[keys[k]]=edits[code][keys[k]];
+          }
+        }
+        cur=detail;
+        renderContent();
+      }).catch(function(){cur=detail;renderContent();});
+    }else{
+      cur=detail;
+      renderContent();
+    }
+  }).catch(function(e){
+    document.getElementById('mainArea').innerHTML='<div class="empty"><div class="ei">❌</div><div class="et">加载失败: '+esc(e.message)+'</div></div>';
+  });
+};
+
+function renderContent(){
+  if(!cur)return;
+  var m=document.getElementById('mainArea');
+  var sc=cur.sc?cur.sc.length:0, rc=getRegCount(cur), fc=cur.f?cur.f.length:0;
+  var _nObj=cur.note?(typeof cur.note==='object'?cur.note:{other:cur.note}):{};
+  var hasNote=!!(_nObj.pre||_nObj.post||_nObj.form_tip||_nObj.other);
+  var matCnt=cur.materials?cur.materials.length:0;
+  var resCnt=cur.results?cur.results.length:0;
+  // Q&A count - check cache or loading
+  var _qaCached=qaData[cur.c];
+  var qaCnt=0;
+  if(_qaCached&&_qaCached!=='INHERIT'&&_qaCached!=='_loading')qaCnt=_qaCached.length;
+  // Build info tags
+  var infoTags=[];
+  if(cur.item_type) infoTags.push(cur.item_type);
+  if(cur.online_service==='是') infoTags.push('🌐 可网办');
+  if(cur.exercise_level) infoTags.push('📍 '+cur.exercise_level);
+  if(cur.has_intermediary==='是') infoTags.push('🔄 通办');
+  var infoHtml=infoTags.length?'<div class="cnt-tags">'+infoTags.map(function(t){return '<span class="cnt-tag">'+esc(t)+'</span>';}).join('')+'</div>':'';
+  var h='<div class="cnt-header">'
+    +'<div class="cnt-back" onclick="backToList()">← 返回事项列表</div>'
+    +'<div class="cnt-title">'+esc(cur.n)+'</div>'
+    +'<div class="cnt-sub">'+esc(cur.d||'未知部门')+(cur.s?' · '+esc(cur.s):'')+' · '+esc(cur.c)+'</div>'
+    +infoHtml
+    +'<div class="tabs">'
+    +'<div class="tab'+(curTab===0?' on':'')+'" onclick="st(0)">基本信息</div>'
+    +'<div class="tab'+(curTab===1?' on':'')+'" onclick="st(1)">受理条件<span class="bdg '+(sc?'bdg-y':'bdg-n')+'">'+sc+'</span></div>'
+    +'<div class="tab'+(curTab===2?' on':'')+'" onclick="st(2)">政策依据<span class="bdg '+(rc?'bdg-y':'bdg-n')+'">'+rc+'</span></div>'
+    +'<div class="tab'+(curTab===3?' on':'')+'" onclick="st(3)">申请表<span class="bdg '+(fc?'bdg-y':'bdg-n')+'">'+fc+'</span></div>'
+    +'<div class="tab'+(curTab===4?' on':'')+'" onclick="st(4)">办事须知<span class="bdg '+(hasNote?'bdg-y':'bdg-n')+'">'+(hasNote?1:0)+'</span></div>'
+    +'<div class="tab'+(curTab===5?' on':'')+'" onclick="st(5)">材料清单<span class="bdg '+(matCnt?'bdg-y':'bdg-n')+'">'+matCnt+'</span></div>'
+    +'<div class="tab'+(curTab===6?' on':'')+'" onclick="st(6)">办事结果<span class="bdg '+(resCnt?'bdg-y':'bdg-n')+'">'+resCnt+'</span></div>'
+    +'<div class="tab'+(curTab===7?' on':'')+'" onclick="st(7)">常见问答<span class="bdg '+(qaCnt?'bdg-y':'bdg-n')+'">'+qaCnt+'</span></div>'
+    +'</div></div>';
+  h+='<div class="tab-body">';
+  if(curTab===0)h+=renderBasicInfo();
+  else if(curTab===1)h+=renderCond();
+  else if(curTab===2)h+=renderReg();
+  else if(curTab===3)h+=renderFields();
+  else if(curTab===4)h+=renderNote();
+  else if(curTab===5)h+=renderMaterials();
+  else if(curTab===6)h+=renderResults();
+  else h+=renderQA();
+  h+='</div>';
+  if(curTab===0||curTab===1||curTab===2||curTab===3||curTab===4){
+    h+='<div class="act-bar">'
+      +'<button class="btn" onclick="clearLocalEdits()">🗑️ 清除本地缓存</button>'
+      +'<button class="btn" onclick="doExport()">📥 导出变更</button>'
+      +'<button class="btn btn-p" onclick="doSave()">💾 保存到数据库</button>'
+      +'</div>';
+  }
+  m.innerHTML=h;
+}
+window.renderContent=renderContent;
+
+window.st=function(t){curTab=t;renderContent();};
+
+/* === Tab 0: 基本信息 === */
+function renderBasicInfo(){
+  var it=cur;
+  if(!it) return '';
+  var h='';
+  // 编辑模式按钮
+  h+='<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
+    +'<button class="btn'+(basicInfoEditMode?' btn-p':'')+'" onclick="toggleBasicInfoEdit()">'+(basicInfoEditMode?'✅ 完成编辑':'✏️ 编辑基本信息')+'</button>'
+    +'</div>';
+  var groups=[
+    {title:'📋 事项标识', rows:[
+      ['行政区划', 'area_name', it.area_name],
+      ['实施部门', 'dept_full_name', it.dept_full_name],
+      ['行业部门', 'industry_dept', it.industry_dept],
+      ['主项名称', 'parent_item_name', it.parent_item_name],
+      ['子项名称', 'sub_item_name', it.sub_item_name],
+      ['实施清单名称', 'impl_list_name', it.impl_list_name],
+      ['事项类型', 'item_type_full', it.item_type_full],
+      ['实施编码', 'official_code', it.official_code],
+      ['基本编码', 'basic_code', it.basic_code],
+      ['事项状态', 'item_status', it.item_status],
+      ['权力来源', 'power_source', it.power_source]
+    ]},
+    {title:'📊 办理详情', rows:[
+      ['办件类型', 'case_type', it.case_type],
+      ['办理形式', 'handling_form', it.handling_form],
+      ['网上办理深度', 'online_depth', it.online_depth],
+      ['是否可以网办', 'online_service', it.online_service],
+      ['是否便民服务', 'is_convenience', it.is_convenience],
+      ['是否通办', 'is_cross_handling', it.is_cross_handling],
+      ['通办类型', 'cross_handling_type', it.cross_handling_type],
+      ['通办区域', 'cross_handling_area', it.cross_handling_area],
+      ['服务对象', 'service_object', it.service_object],
+      ['数量限制', 'quantity_limit', it.quantity_limit]
+    ]},
+    {title:'⏱️ 办理时限', rows:[
+      ['法定时限', 'legal_time_limit', it.legal_time_limit],
+      ['法定时限说明', 'legal_time_desc', it.legal_time_desc],
+      ['承诺时限', 'promise_time_limit', it.promise_time_limit],
+      ['承诺时限说明', 'promise_time_desc', it.promise_time_desc],
+      ['申请时限', 'apply_time_limit', it.apply_time_limit],
+      ['受理时限', 'accept_time_limit', it.accept_time_limit]
+    ]},
+    {title:'💰 收费信息', rows:[
+      ['是否收费', 'is_fee', it.is_fee===true?'是':(it.is_fee===false?'否':it.is_fee)],
+      ['收费项目', 'fee_items', it.fee_items],
+      ['缴费方式', 'payment_method', it.payment_method]
+    ]},
+    {title:'🏢 窗口与渠道', rows:[
+      ['在线申办网址', 'online_url', it.online_url],
+      ['到现场次数', 'onsite_visits', it.onsite_visits],
+      ['纳入一窗办理', 'is_one_window', it.is_one_window],
+      ['纳入综合窗办理', 'is_comprehensive_window', it.is_comprehensive_window],
+      ['进驻政务大厅', 'is_in_hall', it.is_in_hall],
+      ['支持容缺收件', 'support_deficiency_accept', it.support_deficiency_accept===true?'是':(it.support_deficiency_accept===false?'否':'')],
+      ['支持秒批', 'support_instant_approval', it.support_instant_approval===true?'是':(it.support_instant_approval===false?'否':'')],
+      ['告知承诺制', 'support_commitment', it.support_commitment===true?'是':(it.support_commitment===false?'否':'')]
+    ]},
+    {title:'📞 咨询投诉', rows:[
+      ['咨询电话', 'consultation_phone', it.consultation_phone],
+      ['监督投诉电话', 'complaint_phone', it.complaint_phone],
+      ['责任科室', 'responsible_office', it.responsible_office]
+    ]},
+    {title:'⚖️ 法律救济', rows:[
+      ['行政复议部门', 'admin_review_dept', it.admin_review_dept],
+      ['行政复议电话', 'admin_review_phone', it.admin_review_phone],
+      ['行政诉讼部门', 'litigation_dept', it.litigation_dept],
+      ['行政诉讼电话', 'litigation_phone', it.litigation_phone]
+    ]},
+    {title:'🔗 关联事项', rows:[
+      ['有无前置许可', 'has_pre_license', it.has_pre_license],
+      ['前置许可事项', 'pre_license_items', it.pre_license_items],
+      ['涉及中介服务', 'has_intermediary', it.has_intermediary]
+    ]}
+  ];
+  for(var g=0;g<groups.length;g++){
+    var grp=groups[g];
+    h+='<div style="margin-bottom:20px">';
+    h+='<div style="font-size:13px;font-weight:600;color:var(--t1);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--pri)">'+grp.title+'</div>';
+    h+='<div class="info-card" style="margin-bottom:0">';
+    for(var i=0;i<grp.rows.length;i++){
+      var r=grp.rows[i];
+      var label=r[0], field=r[1], val=r[2];
+      if(basicInfoEditMode){
+        // 编辑模式：显示输入框
+        var inputType='text';
+        var inputTag='input';
+        if(field==='online_url'){
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value"><input type="url" id="bi_'+field+'" value="'+esc(val||'')+'" style="width:100%;padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:12px;box-sizing:border-box"></span></div>';
+        } else if(field==='legal_time_desc'||field==='promise_time_desc'||field==='accept_time_desc'||field==='online_process_desc'||field==='window_process_desc'||field==='review_standard'||field==='approval_conditions'||field==='rejection_conditions'||field==='responsibilities'||field==='pre_license_items'){
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value"><textarea id="bi_'+field+'" style="width:100%;padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:12px;resize:vertical;min-height:60px;box-sizing:border-box">'+esc(val||'')+'</textarea></span></div>';
+        } else if(field==='is_fee'||field==='is_convenience'||field==='is_cross_handling'||field==='support_deficiency_accept'||field==='support_instant_approval'||field==='support_commitment'||field==='has_pre_license'||field==='has_intermediary'||field==='is_one_window'||field==='is_comprehensive_window'||field==='is_in_hall'){
+          var bv=(val===true||val==='是')?'是':(val===false||val==='否')?'否':'';
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value"><select id="bi_'+field+'" style="padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:12px"><option value="">--</option><option value="是"'+(bv==='是'?' selected':'')+'>是</option><option value="否"'+(bv==='否'?' selected':'')+'>否</option></select></span></div>';
+        } else {
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value"><input type="text" id="bi_'+field+'" value="'+esc(val||'')+'" style="width:100%;padding:4px 8px;border:1px solid #d9d9d9;border-radius:4px;font-size:12px;box-sizing:border-box"></span></div>';
+        }
+      } else {
+        // 查看模式：显示文本
+        var displayVal=(val===true?'是':(val===false?'否':val));
+        displayVal=displayVal&&displayVal!=='-'&&displayVal!=='None'&&displayVal!=='nan'&&displayVal!=='null'?String(displayVal):'';
+        if(!displayVal) continue;
+        if(field==='online_url'&&displayVal&&(displayVal.startsWith('http://')||displayVal.startsWith('https://'))){
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value"><a href="'+esc(displayVal)+'" target="_blank">'+esc(displayVal)+'</a></span></div>';
+        } else {
+          h+='<div class="info-card-row"><span class="info-card-label">'+esc(label)+'</span><span class="info-card-value">'+esc(displayVal)+'</span></div>';
+        }
+      }
+    }
+    h+='</div></div>';
+  }
+  if(!basicInfoEditMode){
+    // 检查是否有内容
+    var hasContent=false;
+    for(var g=0;g<groups.length;g++){
+      for(var i=0;i<groups[g].rows.length;i++){
+        var v=groups[g].rows[i][2];
+        if(v&&v!=='-'&&v!=='None'&&v!=='nan'&&v!=='null'){hasContent=true;break;}
+      }
+      if(hasContent) break;
+    }
+    if(!hasContent) h='<div class="empty"><div class="ei">📋</div><div class="et">暂无基本信息</div></div>';
+  }
+  return h;
+}
+window.renderBasicInfo=renderBasicInfo;
+
+var basicInfoEditMode=false;
+window.toggleBasicInfoEdit=function(){
+  if(basicInfoEditMode){
+    // 退出编辑模式时自动保存
+    window.saveBasicInfo();
+  } else {
+    basicInfoEditMode=true;
+    renderContent();
+  }
+};
+window.saveBasicInfo=function(){
+  if(!cur)return;
+  var fields=['area_name','dept_full_name','parent_item_name','sub_item_name','impl_list_name','item_type_full','official_code','basic_code','legal_time_limit','promise_time_limit','apply_time_limit','accept_time_limit','online_url','onsite_visits','is_one_window','is_comprehensive_window','is_in_hall','has_pre_license','pre_license_items','has_intermediary','industry_dept','item_status','power_source','case_type','handling_form','online_depth','online_service','service_object','quantity_limit','is_fee','fee_items','payment_method','consultation_phone','complaint_phone','responsible_office','admin_review_dept','admin_review_phone','litigation_dept','litigation_phone','support_deficiency_accept','support_instant_approval','support_commitment','daily_language','short_name','legal_time_desc','promise_time_desc','accept_time_desc','online_process_desc','window_process_desc','review_standard','approval_conditions','rejection_conditions','process_steps','responsibilities','subject_category','cross_handling_type','cross_handling_area'];
+  var patchData={};
+  for(var i=0;i<fields.length;i++){
+    var f=fields[i];
+    var el=document.getElementById('bi_'+f);
+    if(el){
+      var val=el.value||el.textContent;
+      if(val!==cur[f]){
+        patchData[f]=val||null;
+        cur[f]=val;
+      }
+    }
+  }
+  if(Object.keys(patchData).length===0){
+    basicInfoEditMode=false;
+    renderContent();
+    toast('没有修改内容','ok');
+    return;
+  }
+  // 直接写入Supabase主表
+  fetch(SUPA_URL+'/rest/v1/rpc/update_svc_item',{
+    method:'POST',
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({p_code:cur.c,p_data:patchData})
+  }).then(function(r){
+    if(!r.ok) throw new Error('保存失败:'+r.status);
+    return r.json();
+  }).then(function(result){
+    basicInfoEditMode=false;
+    renderContent();
+    if(result&&result.error){toast(result.error,'');}
+    else{toast('已保存到数据库 ✓','ok');}
+  }).catch(function(e){
+    // 降级保存到item_edits
+    persistItem(cur);
+    basicInfoEditMode=false;
+    renderContent();
+    toast('主表写入失败，已保存本地缓存','');
+  });
+};
+window.renderBasicInfo=renderBasicInfo;
+
+/* === Tab 1: 受理条件 === */
+var condEditMode=false;
+function renderCond(){
+  var it=cur;
+  // 如果没有知识库受理条件，显示官方受理条件
+  if(!it.sc||!it.sc.length){
+    if(it.accept_conditions_official){
+      var h='';
+      h+='<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
+        +'<button class="btn" onclick="exportCondJSON()">📥 导出受理条件</button>'
+        +'</div>';
+      h+='<div class="info-card" style="margin-bottom:0">';
+      h+='<div class="info-card-row"><span class="info-card-label">官方受理条件</span><span class="info-card-value" style="white-space:pre-wrap;line-height:1.6">'+esc(it.accept_conditions_official)+'</span></div>';
+      h+='</div>';
+      return h;
+    }
+    return '<div class="empty"><div class="ei">📝</div><div class="et">暂无受理条件数据</div></div>';
+  }
+  var h='';
+  // 编辑模式按钮
+  h+='<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
+    +'<button class="btn" onclick="exportCondJSON()">📥 导出受理条件</button>'
+    +'<button class="btn'+(condEditMode?' btn-p':'')+'" onclick="toggleCondEdit()">'+(condEditMode?'✅ 完成编辑':'✏️ 编辑条件')+'</button>'
+    +'</div>';
+  // 适用对象
+  if(it.s){
+    h+='<div class="cond-meta"><span class="cm-label">适用对象</span><span class="cm-val">'+esc(it.s)+'</span></div>';
+  }
+  // 原始文本
+  if(it.ot){
+    h+='<div class="cond-orig"><div class="cond-orig-label">原始描述</div><div class="cond-orig-text">'+esc(it.ot)+'</div></div>';
+  }
+
+  // 收集所有条件并分类
+  var allConds = []; // {si, ci, cond, scenario}
+  var prohibitions = []; // 禁止性条件
+  var typeGroups = {}; // type_main -> [{si, ci, cond}]
+  var typeLabels = {
+    'subject': '👤 主体适格条件',
+    'procedure': '📋 程序合规条件', 
+    'event': '🔄 事由触发条件',
+    'general': '📌 一般性条件'
+  };
+  var subLabels = {
+    '主体-身份适格': '🧑 身份要求',
+    '主体-资质能力': '📜 资质要求',
+    '主体-资源设施': '🏢 资源设施',
+    '程序-材料要求': '📄 材料要求',
+    '程序-审批流程': '⚙️ 审批流程',
+    '程序-时限要求': '⏰ 时限要求',
+    '程序-前置完成': '✅ 前置完成',
+    '事由-设立新增': '🆕 设立新增',
+    '事由-变更': '🔄 变更',
+    '事由-注销撤销': '❌ 注销撤销',
+    '事由-遗失补办': '🔍 遗失补办'
+  };
+
+  for(var si=0;si<it.sc.length;si++){
+    var sc=it.sc[si],cds=sc.conditions||[];
+    for(var ci=0;ci<cds.length;ci++){
+      var c=cds[ci];
+      var entry={si:si,ci:ci,cond:c,scenario:sc};
+      allConds.push(entry);
+      var tm=c.type_main||'general';
+      if(tm==='prohibition'){
+        prohibitions.push(entry);
+      } else {
+        if(!typeGroups[tm]) typeGroups[tm]=[];
+        typeGroups[tm].push(entry);
+      }
+    }
+  }
+
+  var totalConds = allConds.length;
+  var totalProhibs = prohibitions.length;
+  var totalRegular = totalConds - totalProhibs;
+
+  // 总览统计
+  h+='<div class="cond-summary">该事项共 <b>'+totalRegular+'</b> 项条件';
+  if(totalProhibs>0) h+=' 和 <b class="prohib-count">'+totalProhibs+'</b> 条特别提示';
+  h+='</div>';
+
+  // 特别提示区域（禁止性条件）
+  if(totalProhibs>0){
+    h+='<div class="prohibition-section">';
+    h+='<div class="prohibition-header">⚠️ 特别提示</div>';
+    for(var i=0;i<prohibitions.length;i++){
+      var p=prohibitions[i];
+      var c=p.cond;
+      if(condEditMode){
+        h+='<div class="cd-row cd-edit prohib-row"><div class="cd-idx">禁'+(i+1)+'</div><div class="cd-body">'
+          +'<div class="cd-edit-row"><label>描述</label><textarea class="cd-inp-desc" data-si="'+p.si+'" data-ci="'+p.ci+'" rows="2">'+esc(c.description||c.desc||'')+'</textarea></div>'
+          +'<div class="cd-edit-row cd-edit-inline">'
+          +'<label><input type="checkbox" class="cd-inp-dr" data-si="'+p.si+'" data-ci="'+p.ci+'"'+(c.is_data_driven?' checked':'')+'> 数据驱动</label>'
+          +'<label>数据源 <input class="cd-inp-ds" data-si="'+p.si+'" data-ci="'+p.ci+'" value="'+esc(c.data_source||'')+'"></label>'
+          +'</div>'
+          +'<div class="cd-edit-row"><label>备注</label><textarea class="cd-inp-notes" data-si="'+p.si+'" data-ci="'+p.ci+'" rows="2" placeholder="填写备注...">'+esc(c.notes||'')+'</textarea></div>'
+          +'</div></div>';
+      } else {
+        h+='<div class="prohibition-item">';
+        h+='<div class="prohibition-text">'+esc(c.description||c.desc||'')+'</div>';
+        if(c.notes) h+='<div class="prohibition-note">📝 '+esc(c.notes)+'</div>';
+        h+='</div>';
+      }
+    }
+    h+='</div>';
+  }
+
+  // 按类型分组显示常规条件
+  var displayOrder = ['subject','procedure','event','general'];
+  for(var di=0;di<displayOrder.length;di++){
+    var tm=displayOrder[di];
+    var group=typeGroups[tm];
+    if(!group||!group.length) continue;
+
+    // 按子分类再分组
+    var subGroups = {};
+    for(var gi=0;gi<group.length;gi++){
+      var sub = group[gi].cond.type_sub || '其他';
+      if(!subGroups[sub]) subGroups[sub]=[];
+      subGroups[sub].push(group[gi]);
+    }
+
+    h+='<div class="type-group">';
+    h+='<div class="type-group-header" onclick="togTypeGroup(this)">'
+      +'<span class="tg-label">'+(typeLabels[tm]||tm)+'</span>'
+      +'<span class="tg-count">'+group.length+'项</span>'
+      +'<span class="tg-toggle">▾</span>'
+      +'</div>';
+    h+='<div class="type-group-body">';
+
+    // 按子分类展示
+    var subKeys = Object.keys(subGroups);
+    for(var ski=0;ski<subKeys.length;ski++){
+      var subKey=subKeys[ski];
+      var subItems=subGroups[subKey];
+      if(subKeys.length>1){
+        h+='<div class="sub-group-label">'+(subLabels[subKey]||subKey)+' <span class="sg-count">'+subItems.length+'</span></div>';
+      }
+      for(var ii=0;ii<subItems.length;ii++){
+        var entry=subItems[ii];
+        var c=entry.cond;
+        var drCls=c.is_data_driven?'dr':'nd';
+        var drTxt=c.is_data_driven?'数据驱动':'人工判断';
+        var cid=c.condition_id||c.id||('C'+(ii+1));
+        if(condEditMode){
+          h+='<div class="cd-row cd-edit"><div class="cd-idx">'+cid+'</div><div class="cd-body">'
+            +'<div class="cd-edit-row"><label>描述</label><textarea class="cd-inp-desc" data-si="'+entry.si+'" data-ci="'+entry.ci+'" rows="2">'+esc(c.description||c.desc||'')+'</textarea></div>'
+            +'<div class="cd-edit-row cd-edit-inline">'
+            +'<label><input type="checkbox" class="cd-inp-dr" data-si="'+entry.si+'" data-ci="'+entry.ci+'"'+(c.is_data_driven?' checked':'')+'> 数据驱动</label>'
+            +'<label>数据源 <input class="cd-inp-ds" data-si="'+entry.si+'" data-ci="'+entry.ci+'" value="'+esc(c.data_source||'')+'"></label>'
+            +'</div>'
+            +'<div class="cd-edit-row"><label>备注</label><textarea class="cd-inp-notes" data-si="'+entry.si+'" data-ci="'+entry.ci+'" rows="2" placeholder="填写备注...">'+esc(c.notes||'')+'</textarea></div>'
+            +'<div style="text-align:right;margin-top:4px"><button class="btn btn-del" onclick="delCond('+entry.si+','+entry.ci+')">🗑 删除</button></div>'
+            +'</div></div>';
+        } else {
+          h+='<div class="cd-row"><div class="cd-idx">'+cid+'</div><div class="cd-body">'
+            +'<div class="cd-desc">'+esc(c.description||c.desc||'')+'</div>'
+            +'<div class="cd-tags">'
+            +'<span class="cd-tag '+drCls+'">'+drTxt+'</span>'
+            +(c.data_source?'<span class="cd-tag info">源: '+esc(c.data_source)+'</span>':'')
+            +(c.data_source_type?'<span class="cd-tag info">'+esc(c.data_source_type)+'</span>':'')
+            +(c.type_sub?'<span class="cd-tag type">'+esc(c.type_sub)+'</span>':'')
+            +'</div>'
+            +(c.notes?'<div class="cd-notes-display">📝 '+esc(c.notes)+'</div>':'')
+            +'</div></div>';
+        }
+      }
+    }
+
+    h+='</div></div>';
+  }
+
+  // 编辑模式：添加条件按钮（在最后一个场景下）
+  if(condEditMode && it.sc.length>0){
+    h+='<div style="text-align:center;padding:8px"><button class="btn" onclick="addCond('+((it.sc.length-1))+')">＋ 添加条件</button></div>';
+  }
+
+  // 场景逻辑公式和受理结果（如果有多个场景）
+  if(it.sc.length>1){
+    for(var si=0;si<it.sc.length;si++){
+      var sc=it.sc[si];
+      if(sc.logic_formula || sc.action){
+        h+='<div class="sc-footer-info">';
+        h+='<div class="sc-scenario-name">场景: '+esc(sc.scenario_name||'')+'</div>';
+        if(sc.logic_formula) h+='<div class="sc-logic"><span class="sl-label">逻辑公式</span><span class="sl-val">'+esc(sc.logic_formula)+'</span></div>';
+        if(sc.action) h+='<div class="sc-action"><span class="sa-label">受理结果</span><span class="sa-val">'+esc(sc.action)+'</span></div>';
+        h+='</div>';
+      }
+    }
+  } else if(it.sc.length===1){
+    var sc=it.sc[0];
+    if(sc.logic_formula){
+      h+='<div class="sc-logic"><span class="sl-label">逻辑公式</span><span class="sl-val">'+esc(sc.logic_formula)+'</span></div>';
+    }
+    if(sc.action){
+      h+='<div class="sc-action"><span class="sa-label">受理结果</span><span class="sa-val">'+esc(sc.action)+'</span></div>';
+    }
+  }
+
+  return h;
+}
+window.toggleCondEdit=function(){
+  if(condEditMode){
+    // 保存编辑内容
+    saveCondEdits();
+  }
+  condEditMode=!condEditMode;
+  renderContent();
+};
+
+window.saveCondEdits=function(){
+  if(!cur||!cur.sc)return;
+  document.querySelectorAll('.cd-inp-desc').forEach(function(el){
+    var si=+el.dataset.si, ci=+el.dataset.ci;
+    if(cur.sc[si]&&cur.sc[si].conditions[ci]){
+      cur.sc[si].conditions[ci].description=el.value;
+    }
+  });
+  document.querySelectorAll('.cd-inp-dr').forEach(function(el){
+    var si=+el.dataset.si, ci=+el.dataset.ci;
+    if(cur.sc[si]&&cur.sc[si].conditions[ci]){
+      cur.sc[si].conditions[ci].is_data_driven=el.checked;
+      cur.sc[si].conditions[ci].data_source_type=el.checked?'数据驱动':'人工判断';
+    }
+  });
+  document.querySelectorAll('.cd-inp-ds').forEach(function(el){
+    var si=+el.dataset.si, ci=+el.dataset.ci;
+    if(cur.sc[si]&&cur.sc[si].conditions[ci]){
+      cur.sc[si].conditions[ci].data_source=el.value;
+    }
+  });
+  document.querySelectorAll('.cd-inp-notes').forEach(function(el){
+    var si=+el.dataset.si, ci=+el.dataset.ci;
+    if(cur.sc[si]&&cur.sc[si].conditions[ci]){
+      cur.sc[si].conditions[ci].notes=el.value;
+    }
+  });
+  persistItem(cur);
+  toast('已保存编辑（本地缓存，刷新后仍保留）','ok');
+};
+
+window.addCond=function(si){
+  if(!cur||!cur.sc||!cur.sc[si])return;
+  var cds=cur.sc[si].conditions||[];
+  var newId='C'+(cds.length+1);
+  cds.push({condition_id:newId,description:'新条件描述',is_data_driven:false,data_source:'',data_source_type:'人工判断',notes:''});
+  cur.sc[si].conditions=cds;
+  persistItem(cur);
+  if(condEditMode)renderContent();
+};
+
+window.delCond=function(si,ci){
+  if(!cur||!cur.sc||!cur.sc[si])return;
+  if(!confirm('确定删除此条件？'))return;
+  cur.sc[si].conditions.splice(ci,1);
+  persistItem(cur);
+  if(condEditMode)renderContent();
+};
+
+window.exportCondJSON=function(){
+  if(!cur)return;
+  var data={
+    item_code:cur.c,
+    item_name:cur.n,
+    dept:cur.d||'',
+    scope_object:cur.s||'',
+    original_text:cur.ot||'',
+    scenarios:cur.sc||[]
+  };
+  var d=JSON.stringify(data,null,2);
+  var b=new Blob([d],{type:'application/json'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');
+  a.href=u;a.download=cur.c+'_受理条件.json';a.click();
+  URL.revokeObjectURL(u);
+  toast('导出成功','ok');
+};
+
+window.togSc=function(el){
+  var cl=el.parentElement.nextElementSibling;
+  if(cl.style.display==='none'){cl.style.display='';el.textContent='收起';}
+  else{cl.style.display='none';el.textContent='展开';}
+};
+
+window.togTypeGroup=function(el){
+  var body=el.nextElementSibling;
+  var toggle=el.querySelector('.tg-toggle');
+  if(body.classList.contains('collapsed')){
+    body.classList.remove('collapsed');
+    toggle.textContent='▾';
+  } else {
+    body.classList.add('collapsed');
+    toggle.textContent='▸';
+  }
+};
+
+/* === Tab 1: 政策依据 === */
+function syntaxHighlightJSON(obj,refNums){
+  var json=JSON.stringify(obj,null,2);
+  if(!refNums||!Object.keys(refNums).length) return esc(json);
+  // Highlight lines containing referenced clause numbers
+  var lines=json.split('\n');
+  var result=[];
+  for(var i=0;i<lines.length;i++){
+    var line=lines[i];
+    var isRef=false;
+    for(var k in refNums){
+      if(line.indexOf(k)>=0){isRef=true;break;}
+    }
+    if(isRef){
+      result.push('<span class="json-highlight">'+esc(line)+'</span>');
+    } else {
+      result.push(esc(line));
+    }
+  }
+  return result.join('\n');
+}
+
+var regEditMode=false;
+function renderReg(){
+  var it=cur;
+  var rawRegs=getRegs(it);
+  if(!rawRegs||!rawRegs.length)return '<div class="empty"><div class="ei">📜</div><div class="et">暂无政策依据数据</div></div>';
+  // 用法规库数据丰富slim格式
+  var regs=enrichRegs(rawRegs);
+  var isNewFormat=regs.length>0&&regs[0].articles!==undefined;
+  var h='<div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:10px">'
+    +'<button class="btn" onclick="exportRegJSON()">📥 导出政策依据</button>'
+    +'<button class="btn" onclick="addNewReg()">➕ 添加法规</button>'
+    +'<button class="btn'+(regEditMode?' btn-p':'')+'" onclick="toggleRegEdit()">'+(regEditMode?'✅ 完成编辑':'✏️ 编辑法规')+'</button>'
+    +'</div>';
+  h+='<div class="reg-intro">共 '+regs.length+' 部法规引用'+(isNewFormat?' · 含完整法规库数据':'')+'</div>';
+  if(!regs.length&&!regEditMode){
+    h+='<div class="empty"><div class="ei">📜</div><div class="et">暂无政策依据数据</div><p style="margin-top:8px;color:#888">点击「➕ 添加法规」手动添加</p></div>';
+    return h;
+  }
+  if(isNewFormat){
+    for(var i=0;i<regs.length;i++) h+=renderRegFull(regs[i],i);
+  } else {
+    for(var i=0;i<regs.length;i++) h+=renderRegLegacy(regs[i],i);
+  }
+  return h;
+}
+
+function renderRegFull(r,idx){
+  var h='<div class="reg-card"><div class="reg-hd" onclick="togReg('+idx+')">'
+    +'<span class="rn">'+esc(r.name||'未知法规')+'</span>'
+    +(r.num||r.number?'<span class="rd">'+esc(r.num||r.number)+'</span>':'')
+    +(r.status?'<span class="reg-status '+(r.status.indexOf('现行')>=0?'valid':'other')+'">'+esc(r.status)+'</span>':'')
+    +'<span class="ra" id="ra'+idx+'">›</span></div>'
+    +'<div class="reg-bd" id="rb'+idx+'">';
+  // Metadata bar
+  h+='<div class="reg-meta-bar">';
+  if(r.issuing_authority) h+='<span class="reg-meta-item">📋 <strong>发布机关：</strong>'+esc(r.issuing_authority)+'</span>';
+  if(r.effective_date) h+='<span class="reg-meta-item">📅 <strong>生效日期：</strong>'+esc(r.effective_date)+'</span>';
+  if(r.business_sector) h+='<span class="reg-meta-item">🏷 <strong>行业：</strong>'+esc(r.business_sector)+'</span>';
+  if(r.department) h+='<span class="reg-meta-item">🏢 <strong>主管：</strong>'+esc(r.department)+'</span>';
+  if(r.source_url) h+='<a class="reg-meta-item reg-source-link" href="'+esc(r.source_url)+'" target="_blank" rel="noopener">🔗 来源</a>';
+  h+='</div>';
+  // Referenced clauses
+  h+='<div class="reg-section"><div class="reg-section-title">本事项引用条款（'+(r.ref_clauses?r.ref_clauses.length:0)+'条）</div>';
+  if(regEditMode){
+    // Edit mode for ref_clauses
+    if(r.ref_clauses){
+      for(var j=0;j<r.ref_clauses.length;j++){
+        var cl=r.ref_clauses[j];
+        h+='<div class="ref-clause-edit"><div class="ref-clause-edit-row">'
+          +'<label>条款号</label><input class="reg-inp-cn" data-ri="'+idx+'" data-ci="'+j+'" value="'+esc(cl.cn||'')+'">'
+          +'<label>条款内容</label><input class="reg-inp-cc" data-ri="'+idx+'" data-ci="'+j+'" value="'+esc(cl.cc||'')+'">'
+          +'</div>'
+          +'<div style="text-align:right;margin-top:2px"><button class="btn btn-del" onclick="delRefClause('+idx+','+j+')">🗑 删除</button></div>'
+          +'</div>';
+      }
+    }
+    h+='<div style="text-align:center;padding:6px"><button class="btn" onclick="addRefClause('+idx+')">＋ 添加引用条款</button></div>';
+  } else {
+    if(r.ref_clauses&&r.ref_clauses.length>0){
+      var lastArtNum=null;
+      for(var j=0;j<r.ref_clauses.length;j++){
+        var cl=r.ref_clauses[j];
+        var clauseText=cl.cc||'';
+        if(!clauseText&&r.articles&&r.articles.length){
+          var cn=cl.cn||'';
+          var artMatch=cn.match(/第([一二三四五六七八九十百零\d]+)条/);
+          var paraMatch=cn.match(/第([一二三四五六七八九十\d]+)款/);
+          if(artMatch){lastArtNum='第'+artMatch[1]+'条';}
+          var searchArtNum=lastArtNum;
+          if(searchArtNum){
+            var targetArt=null;
+            for(var ai=0;ai<r.articles.length;ai++){if(r.articles[ai].num===searchArtNum){targetArt=r.articles[ai];break;}}
+            if(targetArt&&targetArt.full){
+              var parts=targetArt.full.split('。').filter(function(s){return s.trim();});
+              if(paraMatch){
+                var cnNums={'一':1,'二':2,'三':3,'四':4,'五':5,'六':6,'七':7,'八':8,'九':9,'十':10};
+                var pn=parseInt(paraMatch[1],10);
+                if(isNaN(pn))pn=cnNums[paraMatch[1]]||0;
+                if(pn>0&&pn<=parts.length)clauseText=parts[pn-1].trim();
+                else if(parts.length>0)clauseText=parts[0].trim();
+              } else if(parts.length>0){
+                clauseText=parts[0].trim();
+              }
+            }
+          }
+        }
+        h+='<div class="ref-clause"><div class="ref-clause-num">'+esc(cl.cn||'')+'</div>'
+          +'<div class="ref-clause-content">'+esc(clauseText)+'</div></div>';
+      }
+    } else {
+      h+='<div style="font-size:12px;color:var(--t3);padding:4px 0">暂无引用条款</div>';
+    }
+  }
+  h+='</div>';
+  // Full articles as JSON
+  if(r.articles&&r.articles.length>0){
+    var refClauseNums={};
+    if(r.ref_clauses){for(var j=0;j<r.ref_clauses.length;j++){refClauseNums[r.ref_clauses[j].cn||'']=true;}}
+    h+='<div class="reg-section" style="padding-bottom:0"><div class="reg-section-title">法规全文条款 JSON（共'+r.articles.length+'条）</div></div>'
+      +'<div class="reg-toggle-articles" id="rta'+idx+'" onclick="togArticles('+idx+')">展开全部 JSON ▼</div>'
+      +'<div id="rarts'+idx+'" style="display:none">'
+      +'<pre class="reg-json-block">'+syntaxHighlightJSON(r.articles,refClauseNums)+'</pre>'
+      +'</div>';
+  }
+  h+='</div></div>';
+  return h;
+}
+
+function renderRegLegacy(r,idx){
+  var h='<div class="reg-card"><div class="reg-hd" onclick="togReg('+idx+')">'
+    +'<span class="rn">'+esc(r.regulation_name||r.name||'未知法规')+'</span>'
+    +(r.doc_number?'<span class="rd">'+esc(r.doc_number)+'</span>':'')
+    +'<span class="ra" id="ra'+idx+'">›</span></div>'
+    +'<div class="reg-bd" id="rb'+idx+'">';
+  if(r.clause_number)h+='<div class="reg-cl"><div class="reg-cl-l">条款号</div><div class="reg-cl-c">'+esc(r.clause_number)+'</div></div>';
+  if(r.clause_content)h+='<div class="reg-cl"><div class="reg-cl-l">条款内容</div><div class="reg-cl-c">'+esc(r.clause_content)+'</div></div>';
+  h+='<div class="reg-meta">';
+  if(r.issuing_authority)h+='<span class="reg-mi">📋 '+esc(r.issuing_authority)+'</span>';
+  if(r.effective_date)h+='<span class="reg-mi">📅 '+esc(r.effective_date)+'</span>';
+  h+='</div></div></div>';
+  return h;
+}
+
+window.togReg=function(i){
+  var b=document.getElementById('rb'+i),a=document.getElementById('ra'+i);
+  if(b.classList.contains('open')){b.classList.remove('open');a.classList.remove('open');}
+  else{b.classList.add('open');a.classList.add('open');}
+};
+
+window.togArticles=function(i){
+  var d=document.getElementById('rarts'+i),t=document.getElementById('rta'+i);
+  if(d.style.display==='none'){d.style.display='';t.textContent='收起全部 JSON ▲';}
+  else{d.style.display='none';t.textContent='展开全部 JSON ▼';}
+};
+
+window.toggleRegEdit=function(){
+  if(regEditMode){saveRegEdits();}
+  regEditMode=!regEditMode;
+  renderContent();
+};
+
+window.saveRegEdits=function(){
+  if(!cur||!cur.regs)return;
+  document.querySelectorAll('.reg-inp-cn').forEach(function(el){
+    var ri=+el.dataset.ri, ci=+el.dataset.ci;
+    if(cur.regs[ri]&&cur.regs[ri].ref_clauses&&cur.regs[ri].ref_clauses[ci]){
+      cur.regs[ri].ref_clauses[ci].cn=el.value;
+    }
+  });
+  document.querySelectorAll('.reg-inp-cc').forEach(function(el){
+    var ri=+el.dataset.ri, ci=+el.dataset.ci;
+    if(cur.regs[ri]&&cur.regs[ri].ref_clauses&&cur.regs[ri].ref_clauses[ci]){
+      cur.regs[ri].ref_clauses[ci].cc=el.value;
+    }
+  });
+  persistItem(cur);
+  toast('已保存编辑（本地缓存，刷新后仍保留）','ok');
+};
+
+window.addNewReg=function(){
+  if(!cur)return;
+  if(!cur.regs)cur.regs=[];
+  var name=prompt('法规名称：');
+  if(!name)return;
+  var doc=prompt('文号（如：国务院令第XXX号）：')||'';
+  var clause=prompt('引用条款（如：第三条第一款）：')||'';
+  var authority=prompt('发布机关：')||'';
+  var date=prompt('生效日期（YYYY-MM-DD）：')||'';
+  cur.regs.push({
+    name:name,
+    doc_number:doc,
+    clause_number:clause,
+    issuing_authority:authority,
+    effective_date:date
+  });
+  persistItem(cur);
+  renderContent();
+  toast('已添加法规「'+name+'」','ok');
+};
+
+window.addRefClause=function(ri){
+  if(!cur||!cur.regs||!cur.regs[ri])return;
+  if(!cur.regs[ri].ref_clauses)cur.regs[ri].ref_clauses=[];
+  cur.regs[ri].ref_clauses.push({cn:'',cc:''});
+  persistItem(cur);
+  renderContent();
+};
+
+window.delRefClause=function(ri,ci){
+  if(!cur||!cur.regs||!cur.regs[ri])return;
+  if(!confirm('确定删除此引用条款？'))return;
+  cur.regs[ri].ref_clauses.splice(ci,1);
+  persistItem(cur);
+  renderContent();
+};
+
+window.exportRegJSON=function(){
+  if(!cur)return;
+  var regs=enrichRegs(getRegs(cur));
+  if(!regs)return;
+  var data={
+    item_code:cur.c,
+    item_name:cur.n,
+    dept:cur.d||'',
+    regulations:regs.map(function(r){
+      return {
+        regulation_id:r.regulation_id||r.id||'',
+        regulation_name:r.name||'',
+        doc_number:r.number||r.num||'',
+        issuing_authority:r.issuing_authority||r.authority||'',
+        effective_date:r.effective_date||r.date||'',
+        status:r.status||'',
+        source_url:r.source_url||r.url||'',
+        business_sector:r.business_sector||r.sector||'',
+        department:r.department||r.dept||'',
+        ref_clauses:r.ref_clauses||[],
+        articles_count:(r.articles||[]).length
+      };
+    })
+  };
+  var d=JSON.stringify(data,null,2);
+  var b=new Blob([d],{type:'application/json'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');
+  a.href=u;a.download=cur.c+'_政策依据.json';a.click();
+  URL.revokeObjectURL(u);
+  toast('导出成功','ok');
+};
+
+/* === Tab 2: 申请表 === */
+function renderFields(){
+  var it=cur;
+  if(!it.f||!it.f.length)return '<div class="empty"><div class="ei">📄</div><div class="et">暂无申请表数据</div></div>';
+  var h='';
+  if(it.fn){
+    h+='<div class="fm-info"><span><strong>表单：</strong>'+esc(it.fn)+'</span>';
+    if(it.fid)h+='<span><strong>编号：</strong>'+esc(Array.isArray(it.fid)?it.fid.join(', '):it.fid)+'</span>';
+    h+='<span><strong>字段数：</strong>'+it.f.length+'</span></div>';
+  }
+  // Collect unique values for filter dropdowns
+  var typeSet={},stdSet={},entSet={},dimSet={};
+  for(var i=0;i<it.f.length;i++){
+    var f=it.f[i];
+    typeSet[f.type||f.field_type||'text']=1;
+    stdSet[f.std||f.standard_field||'']=1;
+    entSet[f.ent||f.entity_type||'']=1;
+    var dims=f.dimensions||f.dims||[];
+    for(var di=0;di<dims.length;di++) dimSet[dims[di]]=1;
+  }
+  // Filter bar
+  h+='<div class="field-filter-bar">'
+    +'<div class="field-filter-group"><label>类型</label><select onchange="fieldFilter.type=this.value;renderContent()"><option value="">全部</option>';
+  var tk=Object.keys(typeSet).sort();for(var ti=0;ti<tk.length;ti++) h+='<option value="'+tk[ti]+'"'+(fieldFilter.type===tk[ti]?' selected':'')+'>'+esc(TM[tk[ti]]||tk[ti])+'</option>';
+  h+='</select></div>'
+    +'<div class="field-filter-group"><label>标准字段</label><select onchange="fieldFilter.std=this.value;renderContent()"><option value="">全部</option>';
+  var sk=Object.keys(stdSet).sort();for(var si=0;si<sk.length;si++){var sv=sk[si];if(!sv)continue;h+='<option value="'+esc(sv)+'"'+(fieldFilter.std===sv?' selected':'')+'>'+esc(sv)+'</option>';}
+  h+='</select></div>'
+    +'<div class="field-filter-group"><label>实体类型</label><select onchange="fieldFilter.ent=this.value;renderContent()"><option value="">全部</option>';
+  var ek=Object.keys(entSet).sort();for(var ei=0;ei<ek.length;ei++){var ev=ek[ei];if(!ev)continue;h+='<option value="'+esc(ev)+'"'+(fieldFilter.ent===ev?' selected':'')+'>'+esc(ev)+'</option>';}
+  h+='</select></div>'
+    +'<div class="field-filter-group"><label>五维标注</label><select onchange="fieldFilter.dim=this.value;renderContent()"><option value="">全部</option>';
+  var dims=['主体','客体','空间','凭证','载体'];for(var di=0;di<dims.length;di++){if(!dimSet[dims[di]])continue;h+='<option value="'+dims[di]+'"'+(fieldFilter.dim===dims[di]?' selected':'')+'>'+dims[di]+'</option>';}
+  h+='</select></div>'
+    +'<button class="btn field-filter-reset" onclick="fieldFilter={type:\'\',std:\'\',ent:\'\',dim:\'\'};renderContent()">重置</button>'
+    +'</div>';
+  // Table
+  h+='<div class="ftbl-wrap"><table class="ftbl"><thead><tr>'
+    +'<th style="width:36px">序号</th><th>字段名称</th><th style="width:76px">类型</th>'
+    +'<th style="width:50px">必填</th><th style="width:90px">标准字段</th>'
+    +'<th style="width:72px">实体类型</th><th style="min-width:100px">五维标注</th><th style="width:70px">操作</th>'
+    +'</tr></thead><tbody>';
+  var DM_META={'主体':{i:'👤',t:'主体 · 谁在办',d:'申请人身份信息，包括单位名称、联系人、电话、证件号等'},'客体':{i:'📋',t:'客体 · 为什么办',d:'申请事项的具体内容，包括标的、数量、规格、理由等'},'空间':{i:'📍',t:'空间 · 在哪办',d:'地点空间信息，包括地址、位置、面积、坐标等'},'凭证':{i:'📄',t:'凭证 · 凭什么办',d:'证件、材料、附件、合同编号等证明材料'},'载体':{i:'📝',t:'载体 · 办理记录',d:'行政流程痕迹，包括日期、签章、受理编号等'}};
+  var shown=0;
+  for(var i=0;i<it.f.length;i++){
+    var f=it.f[i];
+    var ft=f.type||f.field_type||'text';
+    var fs=f.std||f.standard_field||'';
+    var fe=f.ent||f.entity_type||'';
+    var fdims=f.dimensions||f.dims||[];
+    // Apply filters
+    if(fieldFilter.type&&ft!==fieldFilter.type) continue;
+    if(fieldFilter.std&&fs!==fieldFilter.std) continue;
+    if(fieldFilter.ent&&fe!==fieldFilter.ent) continue;
+    if(fieldFilter.dim&&fdims.indexOf(fieldFilter.dim)<0) continue;
+    shown++;
+    var fi=f.idx||(i+1),fn=f.name||f.field_name||'';
+    var fr=f.req||f.required||false;
+    var tl=TM[ft]||ft, el=EM[fe]||fe||'-';
+    var ec=EM_COLORS[fe]||'#666';
+    var dh='';
+    if(fdims.length){for(var di=0;di<fdims.length;di++){var dm=DM_META[fdims[di]]||{i:'•',t:fdims[di],d:fdims[di]};dh+='<span class="dtag '+fdims[di]+'" data-title="'+dm.t+'" data-desc="'+dm.d+'"><span class="di">'+dm.i+'</span>'+fdims[di]+'</span>';}}
+    else{dh='<span style="color:var(--t3);font-size:10px">—</span>';}
+    h+='<tr><td style="color:var(--t3)">'+fi+'</td>'
+      +'<td class="fn">'+esc(fn)+'</td>'
+      +'<td><span class="ttag '+ft+'">'+esc(tl)+'</span></td>'
+      +'<td>'+(fr?'<span class="req-y">是</span>':'<span class="req-n">否</span>')+'</td>'
+      +'<td>'+esc(fs||'-')+'</td>'
+      +'<td><span style="display:inline-block;padding:1px 6px;border-radius:8px;font-size:10px;font-weight:500;background:'+ec+'1a;color:'+ec+'">'+esc(el)+'</span></td>'
+      +'<td><div class="dim-cell">'+dh+'</div></td>'
+      +'<td><button class="btn" style="padding:2px 8px;font-size:11px" onclick="editF('+i+')">编辑</button></td>'
+      +'</tr>';
+  }
+  h+='</tbody></table></div>';
+  if(fieldFilter.type||fieldFilter.std||fieldFilter.ent||fieldFilter.dim){
+    h+='<div style="text-align:center;padding:6px;font-size:11px;color:var(--t3)">筛选结果：'+shown+' / '+it.f.length+' 个字段</div>';
+  }
+  return h;
+}
+
+/* === Tab 3: 办事须知 === */
+function getNoteObj(it){
+  if(!it.note)return {pre:'',post:'',form_tip:'',other:''};
+  if(typeof it.note==='object')return Object.assign({pre:'',post:'',form_tip:'',other:''},it.note);
+  return {pre:'',post:'',form_tip:'',other:String(it.note)};
+}
+function renderNote(){
+  var it=cur;
+  var n=getNoteObj(it);
+  var hasAny=n.pre||n.post||n.form_tip||n.other;
+  var h='<div class="note-wrap">';
+  if(!hasAny){
+    h+='<div class="empty"><div class="ei">📝</div><div class="et">暂无办事须知</div><div class="es">点击下方按钮添加前置事项、后置结果、填表注意等信息</div></div>';
+  } else {
+    if(n.pre) h+='<div class="note-section"><div class="note-section-hd pre">🔗 前置事项</div><div class="note-section-body">'+esc(n.pre).replace(/\n/g,'<br>')+'</div></div>';
+    if(n.post) h+='<div class="note-section"><div class="note-section-hd post">✅ 后置结果</div><div class="note-section-body">'+esc(n.post).replace(/\n/g,'<br>')+'</div></div>';
+    if(n.form_tip) h+='<div class="note-section"><div class="note-section-hd form-tip">📋 填表注意</div><div class="note-section-body">'+esc(n.form_tip).replace(/\n/g,'<br>')+'</div></div>';
+    if(n.other) h+='<div class="note-section"><div class="note-section-hd other">📌 其他说明</div><div class="note-section-body">'+esc(n.other).replace(/\n/g,'<br>')+'</div></div>';
+  }
+  h+='<div style="margin-top:16px;text-align:center">'
+    +'<button class="btn btn-p" onclick="editNote()">✏️ '+(hasAny?'编辑办事须知':'添加办事须知')+'</button>'
+    +'</div>';
+  h+='</div>';
+  return h;
+}
+
+/* === Tab 4: 材料清单 === */
+function renderMaterials(){
+  var it=cur;
+  if(!it.materials||!it.materials.length) return '<div class="empty"><div class="ei">📄</div><div class="et">暂无材料数据</div></div>';
+  
+  // 统计摘要
+  var total=it.materials.length;
+  var exemptCount=0, linkedCount=0, formCount=0, matCount=0;
+  for(var i=0;i<it.materials.length;i++){
+    var m=it.materials[i];
+    if(m.exempt===true) exemptCount++;
+    if(m.link_cert==='已关联') linkedCount++;
+    if(m.form_or_material==='业务表单') formCount++;
+    else if(m.form_or_material==='办理材料') matCount++;
+  }
+  
+  var h='<div class="mat-summary">';
+  h+='<span class="mat-stat">共 <strong>'+total+'</strong> 项</span>';
+  if(formCount||matCount) h+='<span class="mat-stat">办理材料 <strong>'+matCount+'</strong> · 业务表单 <strong>'+formCount+'</strong></span>';
+  if(exemptCount) h+='<span class="mat-stat mat-stat-green">免提交 <strong>'+exemptCount+'</strong></span>';
+  if(linkedCount) h+='<span class="mat-stat mat-stat-blue">已关联证照 <strong>'+linkedCount+'</strong></span>';
+  h+='</div>';
+  
+  h+='<table class="mat-tbl"><thead><tr>'
+    +'<th style="width:36px">序号</th>'
+    +'<th>材料名称</th>'
+    +'<th style="width:80px">类型</th>'
+    +'<th style="width:60px">必要性</th>'
+    +'<th style="width:100px">材料形式</th>'
+    +'<th style="width:120px">来源渠道</th>'
+    +'<th style="width:60px">免提交</th>'
+    +'<th style="width:80px">电子证照</th>'
+    +'</tr></thead><tbody>';
+  for(var i=0;i<it.materials.length;i++){
+    var m=it.materials[i];
+    var name=m.name||'';
+    var type=m.type||'';
+    var necessary=m.required||'';
+    var neccClass=necessary==='必要'?'mat-type-necessary':(necessary==='非必要'||necessary==='容缺'?'mat-type-optional':'');
+    var source=m.source||'';
+    var matForm=m.material_form||m.format||'';
+    var isExempt=m.exempt===true;
+    var linkCert=m.link_cert||'';
+    var linkClass=linkCert==='已关联'?'cert-linked':'cert-unlinked';
+    var linkText=linkCert||'-';
+    
+    h+='<tr'+(isExempt?' class="row-exempt"':'')+'>';
+    h+='<td>'+(i+1)+'</td>';
+    h+='<td><strong>'+esc(name)+'</strong>';
+    if(m.fill_notes) h+='<div class="mat-note">📝 '+esc(m.fill_notes)+'</div>';
+    if(m.exempt_measure&&isExempt) h+='<div class="mat-note">✅ '+esc(m.exempt_measure)+'</div>';
+    h+='</td>';
+    h+='<td>'+esc(type)+'</td>';
+    h+='<td>'+(necessary?'<span class="mat-type '+neccClass+'">'+esc(necessary)+'</span>':'')+'</td>';
+    h+='<td>'+esc(matForm)+'</td>';
+    h+='<td>'+esc(source)+'</td>';
+    h+='<td>'+(isExempt?'<span class="mat-type mat-type-optional">免提交</span>':'')+'</td>';
+    h+='<td><span class="cert-badge '+linkClass+'">'+esc(linkText)+'</span></td>';
+    h+='</tr>';
+  }
+  h+='</tbody></table>';
+  return h;
+}
+window.renderMaterials=renderMaterials;
+
+/* === Tab 5: 办事结果 === */
+function renderResults(){
+  var it=cur;
+  if(!it.results||!it.results.length) return '<div class="empty"><div class="ei">📜</div><div class="et">暂无结果数据</div></div>';
+  var h='';
+  h+='<table class="res-tbl"><thead><tr>'
+    +'<th>序号</th><th>结果名称</th><th>结果类型</th>'
+    +'</tr></thead><tbody>';
+  for(var i=0;i<it.results.length;i++){
+    var r=it.results[i];
+    var name=r.name||r.result_name||'';
+    var type=r.type||r.result_type||'';
+    h+='<tr>'
+      +'<td>'+(i+1)+'</td>'
+      +'<td><strong>'+esc(name)+'</strong></td>'
+      +'<td>'+(type?'<span class="res-type">'+esc(type)+'</span>':'')+'</td>'
+      +'</tr>';
+  }
+  h+='</tbody></table>';
+  return h;
+}
+window.renderResults=renderResults;
+
+/* === Tab 7: 常见问答 Q&A === */
+// 获取Q&A数据（支持缓存和API查询）
+function _getQA(code){
+  // 如果已缓存，直接返回
+  if(qaData[code]&&qaData[code]!=='INHERIT')return Promise.resolve(qaData[code]);
+  // 从API查询
+  return dbApi.getQA(code).then(function(qa){
+    qaData[code]=qa;
+    return qa;
+  });
+}
+window._getQA=_getQA;
+
+function renderQA(){
+  var it=cur;
+  if(!it||!it.c)return '<div class="empty"><div class="ei">💬</div><div class="et">暂无常见问答</div></div>';
+  // 如果已缓存，直接渲染
+  if(qaData[it.c]&&qaData[it.c]!=='INHERIT'&&qaData[it.c]!=='_loading'){
+    return _renderQABody(qaData[it.c]);
+  }
+  // 否则异步加载
+  qaData[it.c]='_loading';
+  dbApi.getQA(it.c).then(function(qa){
+    qaData[it.c]=qa;
+    if(cur&&cur.c===it.c&&curTab===7)renderContent();
+  }).catch(function(e){
+    qaData[it.c]=[];
+    if(cur&&cur.c===it.c&&curTab===7)renderContent();
+  });
+  return '<div class="empty"><div class="ei">⏳</div><div class="et">加载问答数据中…</div></div>';
+}
+function _renderQABody(qa){
+  var it=cur;
+  var h='<div class="qa-wrap">';
+  if(!qa||!qa.length){
+    h+='<div class="empty"><div class="ei">💬</div><div class="et">暂无常见问答</div><div class="es">点击下方按钮添加问答</div></div>';
+  } else {
+    for(var i=0;i<qa.length;i++){
+      var q=qa[i];
+      h+='<div class="qa-card">'
+        +'<div class="qa-q"><span class="qa-label">Q</span>'+esc(q.q)+'</div>'
+        +'<div class="qa-a">'+esc(q.a).replace(/\n/g,'<br>')+'</div>';
+      if(q.ref_name||q.ref_url){
+        h+='<div class="qa-ref">';
+        if(q.ref_url) h+='<a href="'+esc(q.ref_url)+'" target="_blank" rel="noopener">📎 '+esc(q.ref_name||'参考文件')+'</a>';
+        else h+='<span>📎 '+esc(q.ref_name)+'</span>';
+        h+='</div>';
+      }
+      h+='<div class="qa-actions">'
+        +'<button class="btn-sm" onclick="editQAItem('+i+')">✏️ 编辑</button>'
+        +'<button class="btn-sm btn-danger" onclick="deleteQAItem('+i+')">🗑️ 删除</button>'
+        +'</div>'
+        +'</div>';
+    }
+  }
+  h+='<div style="margin-top:16px;text-align:center">'
+    +'<button class="btn btn-p" onclick="addQAItem()">➕ 添加问答</button>'
+    +'<button class="btn" onclick="exportQA()" style="margin-left:8px">📥 导出Q&A</button>'
+    +'</div>';
+  h+='</div>';
+  return h;
+}
+window.renderQA=renderQA;
+
+// Q&A 编辑弹窗
+window.editQAItem=function(idx){
+  var qa=qaData[cur.c]||[];
+  if(!Array.isArray(qa))qa=[];
+  var q=qa[idx];
+  showQAModal(q?{q:q.q,a:q.a,ref_name:q.ref_name||'',ref_url:q.ref_url||''}:null,idx);
+};
+window.deleteQAItem=function(idx){
+  if(!confirm('确定删除这条问答吗？'))return;
+  var qa=qaData[cur.c]||[];
+  if(!Array.isArray(qa))qa=[];
+  qa.splice(idx,1);
+  qaData[cur.c]=qa;
+  renderContent();
+  toast('已删除，记得导出变更','ok');
+};
+window.addQAItem=function(){
+  showQAModal(null,-1);
+};
+
+function showQAModal(data,idx){
+  var d=data||{q:'',a:'',ref_name:'',ref_url:''};
+  var m=document.createElement('div');
+  m.className='modal-bg';
+  m.innerHTML='<div class="modal" style="max-width:640px;width:92%">'
+    +'<div class="modal-hd">'+(idx>=0?'编辑问答':'添加问答')+'</div>'
+    +'<div class="modal-body" style="padding:16px 20px">'
+    +'<label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#374151">问题 (Q)</label>'
+    +'<textarea id="qa_q" rows="2" style="width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px;font-size:13px;margin-bottom:12px;resize:vertical;font-family:inherit">'+esc(d.q)+'</textarea>'
+    +'<label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#374151">答案 (A)</label>'
+    +'<textarea id="qa_a" rows="6" style="width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px;font-size:13px;margin-bottom:12px;resize:vertical;font-family:inherit;line-height:1.6">'+esc(d.a)+'</textarea>'
+    +'<label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#374151">引用文件名称</label>'
+    +'<input id="qa_ref_name" type="text" value="'+esc(d.ref_name)+'" style="width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px;font-size:13px;margin-bottom:12px" />'
+    +'<label style="display:block;font-size:12px;font-weight:600;margin-bottom:4px;color:#374151">引用链接</label>'
+    +'<input id="qa_ref_url" type="text" value="'+esc(d.ref_url)+'" style="width:100%;border:1px solid #d1d5db;border-radius:6px;padding:8px;font-size:13px;margin-bottom:8px" />'
+    +'</div>'
+    +'<div class="modal-ft" style="display:flex;gap:8px;justify-content:flex-end;padding:12px 20px;border-top:1px solid #e5e7eb">'
+    +'<button class="btn" onclick="this.closest(\'.modal-bg\').remove()">取消</button>'
+    +'<button class="btn btn-p" onclick="saveQAItem('+idx+')">保存</button>'
+    +'</div></div>';
+  document.body.appendChild(m);
+}
+
+window.saveQAItem=function(idx){
+  var q=document.getElementById('qa_q').value.trim();
+  var a=document.getElementById('qa_a').value.trim();
+  var rn=document.getElementById('qa_ref_name').value.trim();
+  var ru=document.getElementById('qa_ref_url').value.trim();
+  if(!q){toast('请填写问题','err');return;}
+  if(!a){toast('请填写答案','err');return;}
+  var item={q:q,a:a,ref_name:rn,ref_url:ru};
+  var qa=qaData[cur.c];
+  if(!Array.isArray(qa))qa=[];
+  if(idx>=0)qa[idx]=item; else qa.push(item);
+  qaData[cur.c]=qa;
+  var modal=document.querySelector('.modal-bg');
+  if(modal)modal.remove();
+  renderContent();
+  toast(idx>=0?'问答已更新':'问答已添加','ok');
+};
+
+// 导出Q&A变更
+window.exportQA=function(){
+  var json=JSON.stringify(qaData,null,2);
+  var blob=new Blob([json],{type:'application/json'});
+  var u=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=u;a.download='qa_data.json';a.click();
+  URL.revokeObjectURL(u);
+  toast('Q&A数据已导出','ok');
+};
+
+/* === Edit Modal === */
+window.editF=function(idx){
+  if(!cur||!cur.f)return;
+  var f=cur.f[idx];
+  var ft=f.type||f.field_type||'text';
+  var fe=f.ent||f.entity_type||'';
+  var fs=f.std||f.standard_field||'';
+  var fr=f.req||f.required||false;
+  var fo=f.opts?(Array.isArray(f.opts)?f.opts.join(', '):JSON.stringify(f.opts)):'';
+  var fdims=f.dimensions||f.dims||[];
+  var DIMS=['主体','客体','空间','凭证','载体'];
+  var DIM_DESC={'主体':'👤 谁在办','客体':'📋 为什么办','空间':'📍 在哪办','凭证':'📄 凭什么办','载体':'📝 办理记录'};
+  var mb=document.getElementById('mBox');
+  var oh='<div class="modal-hd"><h3>编辑字段：'+esc(f.name||f.field_name||'')+'</h3>'
+    +'<button class="modal-x" onclick="closeM()">×</button></div>'
+    +'<div class="modal-bd">'
+    +'<div class="fg"><label>字段名称</label><input id="ef-n" value="'+esc(f.name||f.field_name||'')+'"></div>'
+    +'<div class="fg"><label>字段类型</label><select id="ef-t">';
+  for(var k in TM)oh+='<option value="'+k+'"'+(ft===k?' selected':'')+'>'+TM[k]+'</option>';
+  oh+='</select></div>'
+    +'<div class="fg"><label>是否必填</label><select id="ef-r"><option value="1"'+(fr?' selected':'')+'>是</option><option value="0"'+(!fr?' selected':'')+'>否</option></select></div>'
+    +'<div class="fg"><label>标准字段分类</label><input id="ef-s" value="'+esc(fs)+'" placeholder="如：个人签名、单位盖章"></div>'
+    +'<div class="fg"><label>实体类型</label><select id="ef-e"><option value="">-</option>';
+  for(var ei=0;ei<EM_KEYS.length;ei++){var ek=EM_KEYS[ei];oh+='<option value="'+ek+'"'+(fe===ek?' selected':'')+'>'+ek+'</option>';}
+  oh+='</select></div>'
+    +'<div class="fg"><label>选项值（逗号分隔，仅下拉类型）</label><textarea id="ef-o" rows="3" placeholder="选项1, 选项2, 选项3">'+esc(fo)+'</textarea></div>'
+    +'<div class="fg"><label>五维标注（可多选）</label><div class="dim-edit-group">';
+  for(var di=0;di<DIMS.length;di++){
+    var dm=DIMS[di],checked=fdims.indexOf(dm)>=0?' checked':'';
+    oh+='<label class="dim-edit-cb"><input type="checkbox" class="ef-dim" value="'+dm+'"'+checked+'>'
+      +'<span class="dtag '+dm+'" style="cursor:pointer"><span class="di">'+(DIM_DESC[dm]?DIM_DESC[dm].split(' ')[0]:'•')+'</span>'+dm+'</span>'
+      +'<span class="dim-edit-desc">'+DIM_DESC[dm].split(' ').slice(1).join(' ')+'</span></label>';
+  }
+  oh+='</div></div>'
+    +'</div>'
+    +'<div class="modal-ft"><button class="btn" onclick="closeM()">取消</button><button class="btn btn-p" onclick="saveF('+idx+')">保存</button></div>';
+  mb.innerHTML=oh;
+  document.getElementById('mBg').classList.add('show');
+};
+
+window.closeM=function(){document.getElementById('mBg').classList.remove('show');};
+
+window.editNote=function(){
+  if(!cur)return;
+  var n=getNoteObj(cur);
+  var mb=document.getElementById('mBox');
+  var oh='<div class="modal-hd"><h3>编辑办事须知</h3>'
+    +'<button class="modal-x" onclick="closeM()">×</button></div>'
+    +'<div class="modal-bd">'
+    +'<div class="note-edit-section"><label>🔗 前置事项（办理前需先完成的事项/审批）</label>'
+    +'<textarea id="ef-note-pre" rows="3" placeholder="如：需先取得XX许可证，或先完成XX备案...">'+esc(n.pre)+'</textarea></div>'
+    +'<div class="note-edit-section"><label>✅ 后置结果（办理完成后产生的结果/后续步骤）</label>'
+    +'<textarea id="ef-note-post" rows="3" placeholder="如：审批通过后需到XX窗口领取证件，或需在XX日内完成XX...">'+esc(n.post)+'</textarea></div>'
+    +'<div class="note-edit-section"><label>📋 填表注意（申请表填写时的注意事项）</label>'
+    +'<textarea id="ef-note-form" rows="3" placeholder="如：申请日期需填写当天日期，经营范围需与营业执照一致...">'+esc(n.form_tip)+'</textarea></div>'
+    +'<div class="note-edit-section"><label>📌 其他说明（其他影响事项办理的信息）</label>'
+    +'<textarea id="ef-note-other" rows="3" placeholder="如：需按照小散工程进行施工报备...">'+esc(n.other)+'</textarea></div>'
+    +'</div>'
+    +'<div class="modal-ft"><button class="btn" onclick="closeM()">取消</button><button class="btn btn-p" onclick="saveNote()">保存</button></div>';
+  mb.innerHTML=oh;
+  document.getElementById('mBg').classList.add('show');
+};
+
+window.saveNote=function(){
+  if(!cur)return;
+  var pre=document.getElementById('ef-note-pre').value.trim();
+  var post=document.getElementById('ef-note-post').value.trim();
+  var form_tip=document.getElementById('ef-note-form').value.trim();
+  var other=document.getElementById('ef-note-other').value.trim();
+  cur.note={pre:pre,post:post,form_tip:form_tip,other:other};
+  persistItem(cur);
+  closeM();
+  document.getElementById('content').innerHTML=renderContent();
+};
+
+window.saveF=function(idx){
+  var f=cur.f[idx];
+  f.name=document.getElementById('ef-n').value;
+  f.type=document.getElementById('ef-t').value;
+  f.req=document.getElementById('ef-r').value==='1';
+  f.std=document.getElementById('ef-s').value;
+  f.ent=document.getElementById('ef-e').value;
+  var ov=document.getElementById('ef-o').value.trim();
+  f.opts=(ov&&f.type==='select')?ov.split(/[,，]/).map(function(s){return s.trim();}).filter(Boolean):null;
+  // Save dimensions
+  var dimCbs=document.querySelectorAll('.ef-dim:checked');
+  var newDims=[];for(var di=0;di<dimCbs.length;di++)newDims.push(dimCbs[di].value);
+  f.dimensions=newDims;
+  f.dims=newDims;
+  // Track edit
+  if(!localEdits[cur.c])localEdits[cur.c]={fields:{}};
+  localEdits[cur.c].fields[idx]=true;
+  persistItem(cur);
+  closeM();renderContent();toast('字段已更新（本地缓存）','ok');
+};
+
+/* === Export === */
+window.doExport=function(){
+  if(!cur)return;
+  var d=JSON.stringify(cur,null,2);
+  var b=new Blob([d],{type:'application/json'});
+  var u=URL.createObjectURL(b);
+  var a=document.createElement('a');
+  a.href=u;a.download=cur.c+'_'+cur.n+'.json';a.click();
+  URL.revokeObjectURL(u);
+  toast('导出成功','ok');
+};
+
+/* === Save to Supabase === */
+window.doSave=function(){
+  if(!cur)return;
+  toast('正在保存…','');
+  // 保存整个事项到 item_edits 表
+  persistItem(cur);
+  toast('已保存到数据库','ok');
+};
+
+/* === Dimension tooltip (fixed position, avoids overflow clipping) === */
+(function(){
+  var tip=document.getElementById('dim-tip');
+  if(!tip)return;
+  var showTip=function(e){
+    var el=e.target.closest('.dtag');
+    if(!el||!el.dataset.title){tip.style.opacity='0';return;}
+    tip.innerHTML='<div class="dt-title">'+el.dataset.title+'</div><div class="dt-desc">'+el.dataset.desc+'</div>';
+    tip.style.opacity='1';
+    var r=el.getBoundingClientRect();
+    requestAnimationFrame(function(){
+      var tw=tip.offsetWidth,th=tip.offsetHeight;
+      var left=r.left+r.width/2-tw/2;
+      var top=r.top-th-10;
+      if(left<8)left=8;
+      if(left+tw>window.innerWidth-8)left=window.innerWidth-tw-8;
+      if(top<8){top=r.bottom+10;tip.style.transform='none';}
+      tip.style.left=left+'px';
+      tip.style.top=top+'px';
+    });
+  };
+  var hideTip=function(){tip.style.opacity='0';};
+  document.addEventListener('mouseover',showTip);
+  document.addEventListener('mouseout',function(e){
+    if(!e.target.closest('.dtag'))hideTip();
+  });
+})();
+
+loadData();
+})();
+</script>
+
+
+</body></html>
